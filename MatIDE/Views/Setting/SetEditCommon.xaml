@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="MatIDE.Views.Setting.SetEditCommon"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:cv="clr-namespace:MatIDE.Converters"
+				mc:Ignorable="d" 
+				xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+				d:DesignHeight="600" d:DesignWidth="420">
+
+	<UserControl.Resources>
+		<!-- コンバータ -->
+		<cv:EnumRadioConverter x:Key="enumRadioConverter"/>
+	</UserControl.Resources>
+
+	<StackPanel>
+		<Label Content="カーソル" />
+		<StackPanel Margin="20,6,10,10">
+			<CheckBox IsChecked="{Binding FreeCursor}" Content="フリーカーソル(_C)" />
+			<CheckBox IsChecked="{Binding StopsBothEndsWord}" Content="単語単位で移動するときに単語の両端で止まる(_B)" />
+			<CheckBox IsChecked="{Binding StopsBothEndsPara}" Content="段落単位で移動するときに段落の両端で止まる(_P)" />
+			<CheckBox IsChecked="{Binding NoActivateMoveMouse}" Content="マウスカーソルのアクティブ化ではカーソルを移動しない(_O)" />
+		</StackPanel>
+		<TextBlock Text="カーソル形状" />
+		<StackPanel Margin="20,6,10,10">
+			<Grid Margin="15,4,0,4">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<RadioButton Grid.Column="0" IsChecked="{Binding CaretType, Converter={StaticResource enumRadioConverter}, ConverterParameter=Windows}" GroupName="caretTypes" HorizontalAlignment="Center">_Windows系カーソル</RadioButton>
+				<RadioButton Grid.Column="1" IsChecked="{Binding CaretType, Converter={StaticResource enumRadioConverter}, ConverterParameter=MSDos}" GroupName="caretTypes" HorizontalAlignment="Center">MS-_DOS系カーソル</RadioButton>
+			</Grid>
+		</StackPanel>
+
+
+		<TextBlock Text="表示" />
+		<StackPanel Margin="20,6,10,10">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding ShowBookmarkArea}" Content="ブックマーク領域(_K)" />
+				<CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding ShowChangeArea}" Content="変更行領域(_M)" />
+				<CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding ShowVScroll}" Content="垂直スクロールバー(_V)" />
+				<CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding ShowHScroll}" Content="水平スクロールバー(_H)" />
+			</Grid>
+			<CheckBox IsChecked="{Binding ShowRuler}" Content="ルーラー(_R)" />
+			<Grid Margin="20,0,0,0" IsEnabled="{Binding ShowRuler}">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label Content="ルーラーの高さ" Grid.Row="0" Grid.Column="0" Target="rulerHeight" />
+				<xctk:IntegerUpDown Name="rulerHeight" Grid.Row="0" Grid.Column="1" Margin="0,0,10,0" Value="{Binding RulerHeight}" />
+				<Label Content="ドット" Grid.Row="0" Grid.Column="2" />
+				<Label Content="ルーラーとテキストの間隔" Grid.Row="1" Grid.Column="0" Target="rulerSpace" />
+				<xctk:IntegerUpDown Name="rulerSpace" Grid.Row="1" Grid.Column="1" Margin="0,0,10,0" Value="{Binding RulerBottomSpace}" />
+				<Label Content="ドット" Grid.Row="1" Grid.Column="2" />
+			</Grid>
+		</StackPanel>
+		<TextBlock Text="スクロール" />
+		<StackPanel Margin="20,6,10,10" Orientation="Horizontal">
+			<Label Content="行数" Target="scrollCount" />
+			<xctk:IntegerUpDown Name="scrollCount" Width="80" Margin="10,0,10,0" Value="{Binding RptScrollLineNum}" />
+			<CheckBox Content="少し滑らかにする" IsChecked="{Binding RptScrollSmooth}" VerticalAlignment="Center" Margin="20,0,0,0" />
+		</StackPanel>
+		<StackPanel Margin="20,0,10,10">
+			<Label Content="マウスホイール操作" />
+			<Grid Margin="20,0,0,0" IsEnabled="{Binding ShowRuler}">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="2*" />
+					<ColumnDefinition Width="4*" />
+				</Grid.ColumnDefinitions>
+				<Label Content="ページスクロール" Grid.Row="0" Grid.Column="0" />
+				<ComboBox Name="pageScrl" Grid.Row="0" Grid.Column="1" />
+				<Label Content="横スクロール" Grid.Row="1" Grid.Column="0" />
+				<ComboBox Name="horzScrl" Grid.Row="1" Grid.Column="1" />
+			</Grid>
+		</StackPanel>
+		<Label Content="フォント設定" />
+		<Grid Margin="20,0,10,0" IsEnabled="{Binding ShowRuler}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="4*" />
+				<ColumnDefinition Width="2*" />
+			</Grid.ColumnDefinitions>
+			<Label Content="フォント" Grid.Row="0" Grid.Column="0" />
+			<Label Content="サイズ" Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" />
+			<ComboBox Name="fontName" Grid.Row="1" Grid.Column="0" />
+			<ComboBox Name="fontSize" Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" />
+		</Grid>
+		<CheckBox Content="画面描画にキャッシュを使う" IsChecked="{Binding UseDrawCache}" Margin="5,10,10,0" />
+	</StackPanel>
+</UserControl>

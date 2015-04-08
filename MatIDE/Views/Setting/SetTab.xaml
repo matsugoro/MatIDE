@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="MatIDE.Views.Setting.SetTab"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			mc:Ignorable="d" 
+			d:DesignHeight="500" d:DesignWidth="420">
+	<StackPanel>
+		<TextBlock Text="タブ設定"></TextBlock>
+		<StackPanel Margin="20,6,10,10">
+			<CheckBox IsChecked="{Binding ShowCloseButton}" Content="タブ内に「閉じる」ボタンを表示" />
+			<CheckBox IsChecked="{Binding ShowIcon}" Content="タブにアイコンを表示" />
+			<CheckBox IsChecked="{Binding ShowDocMenu}" Content="タブ領域右側にドキュメントメニューを表示" />
+			<Grid Margin="15,4,0,4" IsEnabled="{Binding ShowDocMenu}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<CheckBox Grid.Column="0" IsChecked="{Binding SortDocList}" Content="ドキュメント一覧をドキュメント名でソート" />
+			</Grid>
+			<CheckBox IsChecked="{Binding AlwaysFloatingTab}" Content="フローティングタブウェルを常にウィンウィンドウの上部に表示" />
+			<CheckBox IsChecked="{Binding InsertRightNewTab}" Content="既存タブの右側に新規タブを挿入" />
+			<CheckBox IsChecked="{Binding TabFixedWidth}" Content="タブを等幅で表示する" />
+			<CheckBox IsChecked="{Binding FixedTabInOtherLine}" Content="固定されたタブを別行に表示" />
+			<CheckBox IsChecked="{Binding ShowPinOnNotFixed}" Content="固定されていないタブにピンボタンを表示" />
+			<CheckBox IsChecked="{Binding RetainPinStatus}" Content="ドキュメントがウェルから削除されたときにピンステータスを維持" />
+			<CheckBox IsChecked="{Binding ConfirmMultiClose}" Content="複数のドキュメントを閉じるときに確認" />
+		</StackPanel>
+	</StackPanel>
+</UserControl>

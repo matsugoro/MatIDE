@@ -1,0 +1,351 @@
+﻿<Window x:Class="MatIDE.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+		xmlns:vv="clr-namespace:MatIDE.Views.UC"
+		xmlns:vw="clr-namespace:MatIDE.Views.Setting"
+		xmlns:vm="clr-namespace:MatIDE.ViewModels"
+		xmlns:av="http://schemas.xceed.com/wpf/xaml/avalondock"
+		Name="Main"
+		Title="MainWindow" WindowState="Maximized" Height="1123.286" Width="1022.842">
+
+	<!-- データコンテキストの設定 -->
+	<Window.DataContext>
+		<vm:MainWindowVM />
+	</Window.DataContext>
+
+	<i:Interaction.Triggers>
+		<l:InteractionMessageTrigger MessageKey="ShowCommand" Messenger="{Binding Messenger}">
+			<l:TransitionInteractionMessageAction WindowType="{x:Type vw:SettingWnd}" Mode="Modal" />
+		</l:InteractionMessageTrigger>
+	</i:Interaction.Triggers>
+
+	<DockPanel Name="GeneralDock">
+		<Menu DockPanel.Dock="Top" Height="23" VerticalAlignment="Center" BorderThickness="0">
+			<MenuItem Header="ファイル(_F)" Height="23">
+				<MenuItem Header="新規作成(_N)">
+					<MenuItem Header="プロジェクト(_P)" InputGestureText="Shift+Ctrl+N" />
+					<MenuItem Header="ファイル(_F)" InputGestureText="Ctrl+N" />
+					<MenuItem Header="既存のディレクトリからプロジェクトを作成(_E)" />
+				</MenuItem>
+				<MenuItem Header="開く(_O)">
+					<MenuItem Header="ファイル(_O)" InputGestureText="Ctrl+O" />
+					<MenuItem Header="プロジェクト(_P)..." InputGestureText="Shift+Ctrl+O" />
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="プロジェクトを閉じる" />
+				<Separator />
+				<MenuItem Header="閉じる(_C)" />
+				<MenuItem Header="上書き保存(_S)" InputGestureText="Ctrl+S" />
+				<MenuItem Header="名前を付けて保存(_A)..." />
+				<MenuItem Header="すべてを保存" InputGestureText="Ctrl+Shift+S" />
+				<Separator />
+				<MenuItem Header="印刷(_P)..." InputGestureText="Ctrl+P" />
+				<MenuItem Header="印刷プレビュー(_V)" />
+				<MenuItem Header="プリンタの設定..." />
+				<Separator />
+				<MenuItem Header="最近使ったファイル" >
+					<MenuItem Header="Dummy1" />
+				</MenuItem>
+				<MenuItem Header="最新使ったプロジェクト">
+					<MenuItem Header="Dummy2" />
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="MatIDEの終了(_X)" Command="{Binding QuitCommand}" CommandParameter="{Binding ElementName=Main}" />
+			</MenuItem>
+			<MenuItem Header="編集(_E)">
+				<MenuItem Header="元に戻す(_U)" InputGestureText="Ctrl+Z" />
+				<MenuItem Header="やり直し" InputGestureText="Ctrl+Y" />
+				<Separator />
+				<MenuItem Header="切り取り(_T)" InputGestureText="Ctrl+X" />
+				<MenuItem Header="コピー(_C)" InputGestureText="Ctrl+C" />
+				<MenuItem Header="貼り付け(_P)" InputGestureText="Ctrl+V" />
+				<MenuItem Header="削除(_D)" InputGestureText="Del" />
+				<Separator />
+				<MenuItem Header="文字コードセット指定" />
+				<MenuItem Header="改行コード指定" >
+					<MenuItem Header="改行コード指定：CRLF" />
+					<MenuItem Header="改行コード指定：LF" />
+					<MenuItem Header="改行コード指定：CR" />
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="挿入">
+					<MenuItem Header="テキストとしてファイルを挿入" />
+					<MenuItem Header="日付挿入" />
+					<MenuItem Header="時刻挿入" />
+					<MenuItem Header="制御コード挿入" />
+				</MenuItem>
+				<MenuItem Header="高度な操作">
+					<MenuItem Header="単語の左端まで削除" />
+					<MenuItem Header="単語の右端まで削除" />
+					<Separator />
+					<MenuItem Header="現在位置の単語を選択" />
+					<MenuItem Header="単語切り取り" />
+					<MenuItem Header="単語削除" />
+					<Separator />
+					<MenuItem Header="行頭まで切り取り" />
+					<MenuItem Header="行末まで切り取り" />
+					<Separator />
+					<MenuItem Header="行頭まで削除" />
+					<MenuItem Header="行末まで削除" />
+					<Separator />
+					<MenuItem Header="行切り取り" />
+					<MenuItem Header="行削除" />
+					<MenuItem Header="選択範囲内全行コピー" />
+					<MenuItem Header="選択範囲内全行引用符付きコピー" />
+					<MenuItem Header="選択範囲内全行行番号付きコピー" />
+					<MenuItem Header="選択範囲内色付きHTMLコピー" />
+					<MenuItem Header="選択範囲内行番号色付きHTMLコピー" />
+					<Separator />
+					<MenuItem Header="このファイル名をコピー" />
+					<MenuItem Header="このファイルのパス名をコピー" />
+				</MenuItem>
+				<MenuItem Header="移動">
+					<MenuItem Header="指定行にジャンプ..." />
+					<Separator />
+					<MenuItem Header="カーソル上移動(２行単位)" />
+					<MenuItem Header="カーソル下移動（２行単位）" />
+					<MenuItem Header="単語の左端に移動" />
+					<MenuItem Header="単語の右端に移動" />
+					<MenuItem Header="前の段落へ移動" />
+					<MenuItem Header="次の段落へ移動" />
+					<MenuItem Header="行頭に移動（折り返し単位）" />
+					<MenuItem Header="行末に移動（折り返し単位）" />
+					<Separator />
+					<MenuItem Header="ページアップ" />
+					<MenuItem Header="ページダウン" />
+					<MenuItem Header="ファイルの先頭に移動" />
+					<MenuItem Header="ファイルの最後に移動" />
+				</MenuItem>
+				<MenuItem Header="選択">
+					<MenuItem Header="すべて選択" InputGestureText="Ctrl+A" />
+					<Separator />
+					<MenuItem Header="現在位置の単語を選択" />
+					<MenuItem Header="範囲選択開始" />
+					<Separator />
+					<MenuItem Header="（選択）カーソル上移動（２行単位）" />
+					<MenuItem Header="（選択）カーソル下移動（２行単位）" />
+					<MenuItem Header="（選択）単語の左端に移動" />
+					<MenuItem Header="（選択）単語の右端に移動" />
+					<MenuItem Header="（選択）前の段落に移動" />
+					<MenuItem Header="（選択）次の段落に移動" />
+					<MenuItem Header="（選択）行頭に移動（折り返し単位）" />
+					<MenuItem Header="（選択）行末に移動（折り返し単位）" />
+					<Separator />
+					<MenuItem Header="（選択）ページアップ" />
+					<MenuItem Header="（選択）ページダウン" />
+					<MenuItem Header="（選択）ファイルの先頭に移動" />
+					<MenuItem Header="（選択）ファイルの最後に移動" />
+				</MenuItem>
+				<MenuItem Header="矩形選択">
+					<MenuItem Header="矩形選択開始" />
+					<Separator />
+					<MenuItem Header="（矩形選択）カーソル上移動（２行単位）" />
+					<MenuItem Header="（矩形選択）カーソル下移動（２行単位）" />
+					<MenuItem Header="（矩形選択）単語の左端に移動" />
+					<MenuItem Header="（矩形選択）単語の右端に移動" />
+					<MenuItem Header="（矩形選択）前の段落に移動" />
+					<MenuItem Header="（矩形選択）次の段落に移動" />
+					<MenuItem Header="（矩形選択）行頭に移動（折り返し単位）" />
+					<MenuItem Header="（矩形選択）行末に移動（折り返し単位）" />
+					<Separator />
+					<MenuItem Header="（矩形選択）ページアップ" />
+					<MenuItem Header="（矩形選択）ページダウン" />
+					<MenuItem Header="（矩形選択）ファイルの先頭に移動" />
+					<MenuItem Header="（矩形選択）ファイルの最後に移動" />
+				</MenuItem>
+				<MenuItem Header="整形">
+					<MenuItem Header="左（先頭）の空白を削除" />
+					<MenuItem Header="右（末尾）の空白を削除" />
+					<Separator />
+					<MenuItem Header="選択行の昇順ソート" />
+					<MenuItem Header="選択行の降順ソート" />
+					<Separator />
+					<MenuItem Header="連続した重複行の削除" />
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="挿入/上書きモード切り替え(_I)" InputGestureText="Ins" />
+				<Separator />
+				<MenuItem Header="詳細">
+					<MenuItem Header="ドキュメントのフォーマット" />
+					<MenuItem Header="選択範囲のフォーマット" />
+					<MenuItem Header="選択行にタブを設定" />
+					<MenuItem Header="選択行のタブ設定を解除" />
+					<Separator />
+					<MenuItem Header="選択範囲をコメントアウト" />
+					<MenuItem Header="選択範囲のコメントアウトを解除" />
+					<Separator />
+					<MenuItem Header="行インデント" />
+					<MenuItem Header="行インデント解除" />
+					<Separator />
+					<MenuItem Header="変換">
+						<MenuItem Header="大文字に変換" />
+						<MenuItem Header="小文字に変換" />
+						<MenuItem Header="全角 → 半角" />
+						<MenuItem Header="半角＋全ひら → 全角・カタカナ" />
+						<MenuItem Header="半角＋全カナ → 全角・ひらがな" />
+						<MenuItem Header="全角英数 → 半角英数" />
+						<MenuItem Header="半角英数 → 全角英数" />
+						<MenuItem Header="全角カタカナ → 半角カタカナ" />
+						<MenuItem Header="半角カタカナ → 全角カタカナ" />
+						<MenuItem Header="半角カタカナ → 全角ひらがな" />
+						<Separator />
+						<MenuItem Header="TAB → スペース" />
+						<MenuItem Header="スペース → TAB" />
+					</MenuItem>
+					<MenuItem Header="文字コード変換">
+						<MenuItem Header="自動判別 → SJIS" />
+						<MenuItem Header="JIS → SIJIS" />
+						<MenuItem Header="EUC → SJIS" />
+						<MenuItem Header="Unicode → SJIS" />
+						<MenuItem Header="UnicodeBE → SJIS" />
+						<MenuItem Header="UTF-8 → SJIS" />
+						<MenuItem Header="UTF-7 → SJIS" />
+						<Separator />
+						<MenuItem Header="SJIS → JIS" />
+						<MenuItem Header="SJIS → EUC" />
+						<MenuItem Header="SJIS → UTF-8" />
+						<MenuItem Header="SJIS → UTF-7" />
+						<Separator />
+						<MenuItem Header="Base64デコードして保存" />
+						<MenuItem Header="Uudecodeして保存" />
+					</MenuItem>
+				</MenuItem>
+				<MenuItem Header="ブックマーク">
+					<MenuItem Header="ブックマークの設定/解除(_T)" InputGestureText="Ctrl+K, Ctrl+K" />
+					<MenuItem Header="すべてのブックマークを有効にする" />
+					<MenuItem Header="ブックマークを有効にする" />
+					<MenuItem Header="前のブックマーク" />
+					<MenuItem Header="次のブックマーク" />
+					<MenuItem Header="ブックマークをクリア" />
+					<Separator />
+					<MenuItem Header="ドキュメント内の前のブックマーク" />
+					<MenuItem Header="ドキュメント内の次のブックマーク" />
+					<MenuItem Header="ドキュメント内のブックマークをすべてクリア" />
+				</MenuItem>
+				<MenuItem Header="アウトライン">
+					<MenuItem Header="ブロックを折りたたむ" />
+					<MenuItem Header="すべてを折りたたむ" />
+					<Separator />
+					<MenuItem Header="アウトラインの展開/折り畳み" />
+					<MenuItem Header="すべてのアウトラインの切り替え" />
+					<MenuItem Header="アウトラインの中止" />
+					<MenuItem Header="カレントを表示" />
+					<MenuItem Header="定義に折りたたむ" />
+				</MenuItem>
+				<MenuItem Header="Intellisence">
+					<MenuItem Header="メンバの一覧" />
+					<MenuItem Header="パラメータヒント" />
+					<MenuItem Header="クイックヒント" />
+					<MenuItem Header="入力候補" />
+					<MenuItem Header="完了モードの切り替え" />
+					<Separator />
+					<MenuItem Header="スぺニットの挿入" />
+					<MenuItem Header="ブロックの挿入" />
+				</MenuItem>
+			</MenuItem>
+			<MenuItem Header="表示(_V)">
+				<MenuItem Header="アプリケーションの外観(_A)">
+					<MenuItem Header="Windows _2000" />
+					<MenuItem Header="Windows _XP" />
+					<MenuItem Header="Visual Studio 200_5" />
+					<MenuItem Header="Visual Studio 200_8" />
+					<MenuItem Header="_Office Style">
+						<MenuItem Header="Office _XP" />
+						<MenuItem Header="Office 200_3" />
+						<MenuItem Header="Office 2007 _BlueStyle" />
+						<MenuItem Header="Office 2007 B_lackStyle" />
+						<MenuItem Header="Office 2007 _SilverStyle" />
+						<MenuItem Header="Office 2007 _AquaStyle" />
+					</MenuItem>
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="ツールバー(_T)">
+					<MenuItem Header="標準" />
+					<Separator />
+					<MenuItem Header="カスタマイズ" />
+				</MenuItem>
+				<MenuItem Header="ステータスバー(_S)" />
+				<MenuItem Header="ファンクションキー(_F)" />
+				<Separator />
+				<MenuItem Header="プロジェクトファイルビュー" />
+				<MenuItem Header="ローカルファイルビュー" />
+				<MenuItem Header="端末ウィンドウ">
+					<MenuItem Header="Dummy3" />
+				</MenuItem>
+				<MenuItem Header="アウトライン ウィンドウ" />
+				<MenuItem Header="ブックマーク ウィンドウ" />
+				<MenuItem Header="出力ウィンドウ" />
+				<MenuItem Header="検索結果" />
+				<Separator />
+				<MenuItem Header="折り返し方法">
+					<MenuItem Header="折り返さない" />
+					<MenuItem Header="指定行で折り返す" />
+					<MenuItem Header="右端で折り返す" />
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="スペース文字を表示" />
+				<MenuItem Header="TAB文字を表示" />
+			</MenuItem>
+			<MenuItem Header="検索(_S)">
+				<MenuItem Header="検索(_F)" />
+				<MenuItem Header="次を検索" />
+				<MenuItem Header="前を検索" />
+				<MenuItem Header="置換" />
+				<MenuItem Header="検索マークの切り替え" />
+				<MenuItem Header="インクリメンタルサーチ" />
+				<Separator />
+				<MenuItem Header="_Grep" />
+				<Separator />
+				<MenuItem Header="対括弧の検索" />
+			</MenuItem>
+			<MenuItem Header="ツール(_T)">
+				<MenuItem Header="キーマクロの記録開始" />
+				<MenuItem Header="キーマクロの保存" />
+				<MenuItem Header="キーマクロの読み込み" />
+				<MenuItem Header="キーマクロの実行" />
+				<MenuItem Header="登録済みマクロ">
+					<MenuItem Header="登録済みマクロはありません" />
+				</MenuItem>
+				<MenuItem Header="名前を指定してキーマクロを実行" />
+				<Separator />
+				<MenuItem Header="外部ツールの実行(_C)" />
+				<Separator />
+				<MenuItem Header="コードスぺニット管理" />
+				<MenuItem Header="入力保管管理" />
+				<Separator />
+				<MenuItem Header="環境設定(_O)" Command="{Binding SettingCommand}" />
+			</MenuItem>
+			<MenuItem Header="ウィンドウ(_W)">
+				<MenuItem Header="分割" />
+				<MenuItem Header="フローティング" />
+				<MenuItem Header="すべてフローティング表示" />
+				<MenuItem Header="ドッキング" />
+				<MenuItem Header="自動的に隠す" />
+				<MenuItem Header="非表示" />
+				<Separator />
+				<MenuItem Header="タブを固定する" />
+				<Separator />
+				<MenuItem Header="水平タブグループの新規作成" />
+				<MenuItem Header="垂直タブグループの新規作成" />
+				<MenuItem Header="すべてのドキュメントを閉じる" />
+				<MenuItem Header="ウィンドウレイアウトのリセット" />
+				<Separator />
+				<MenuItem Header="ウィンドウ" />
+			</MenuItem>
+			<MenuItem Header="ヘルプ(_H)">
+				<MenuItem Header="バージョン情報(_A)" />
+			</MenuItem>
+			<MenuItem Header="デバッグ(_D)">
+				<MenuItem Header="テスト(_T)" Command="{Binding TestWinCommand}" />
+			</MenuItem>
+		</Menu>
+		<StatusBar DockPanel.Dock="Bottom">
+			<StatusBarItem DockPanel.Dock="Right">Item2</StatusBarItem>
+			<StatusBarItem DockPanel.Dock="Left" >Item1</StatusBarItem>
+		</StatusBar>
+		<av:DockingManager x:Name="_dockingManager">
+		</av:DockingManager>
+	</DockPanel>
+</Window>

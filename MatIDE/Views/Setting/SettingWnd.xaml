@@ -1,0 +1,52 @@
+﻿<Window x:Class="MatIDE.Views.Setting.SettingWnd"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="clr-namespace:MatIDE.ViewModels"
+		xmlns:vs="clr-namespace:MatIDE.Views.Setting"
+		xmlns:bh="clr-namespace:MatIDE.Behaviors"
+		Title="環境設定" Height="705.75" Width="778" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+		<vm:SettingViewModel x:Key="SettingViewModel" />
+		<HierarchicalDataTemplate
+			x:Key="treeViewTemplate"
+			ItemsSource="{Binding Path=Children}">
+			<TextBlock Text="{Binding Path=Name}" />
+		</HierarchicalDataTemplate>
+
+		<DataTemplate DataType="{x:Type vm:SettingGeneralVM}">
+			<vs:SetGeneral />
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type vm:SettingTabVM}">
+			<vs:SetTab />
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type vm:SettingEditCommonVM}">
+			<vs:SetEditCommon />
+		</DataTemplate>
+	</Window.Resources>
+	
+	<Window.DataContext>
+		<Binding Mode="OneWay" Source="{StaticResource SettingViewModel}" />
+	</Window.DataContext>
+
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10,10,10">
+			<Button Name="okBtn" Width="80" Margin="10,0,10,0">O K</Button>
+			<Button Name="cancelBtn" Width="80" Margin="10,0,0,0">キャンセル</Button>
+		</StackPanel>
+		<Grid Margin="5,5,10,5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<TreeView Grid.Column="0"
+				  ItemTemplate="{StaticResource treeViewTemplate}"
+				  ItemsSource="{Binding Nodes}"
+				  bh:SettingTVBehavior.OnSelectedItemChanged="{Binding Path=SelChangeCommand}"/>
+			<ContentControl
+				Grid.Column="1"
+				Margin="20,0,10,0" Content="{Binding Path=CurrentViewModel}">
+			</ContentControl>
+		</Grid>	
+	</DockPanel>
+</Window>

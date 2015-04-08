@@ -1,0 +1,14 @@
+﻿<Window x:Class="MatIDE.Test.Window1"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:model="clr-namespace:MatIDE.Views.Setting"
+		Title="環境設定" Height="532.8" Width="450" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+		FontFamily="Meiryo" FontSize="12"
+	>
+	<StackPanel>
+		<model:SetGeneral></model:SetGeneral>
+	</StackPanel>
+
+
+
+</Window>
