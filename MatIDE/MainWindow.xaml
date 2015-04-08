@@ -345,7 +345,30 @@
 			<StatusBarItem DockPanel.Dock="Right">Item2</StatusBarItem>
 			<StatusBarItem DockPanel.Dock="Left" >Item1</StatusBarItem>
 		</StatusBar>
-		<av:DockingManager x:Name="_dockingManager">
+
+		<av:DockingManager x:Name="_dockingManager"
+						   AnchorablesSource="{Binding Tools}">
+
+			<av:DockingManager.LayoutItemContainerStyle>
+				<Style TargetType="{x:Type av:LayoutItem}">
+					<Setter Property="Title" Value="{Binding Model.Title}" />
+				</Style>
+			</av:DockingManager.LayoutItemContainerStyle>
+
+			<av:DockingManager.LayoutItemTemplateSelector>
+				
+			</av:DockingManager.LayoutItemTemplateSelector>
+			
+			
+			<av:LayoutRoot>
+				<av:LayoutPanel Orientation="Horizontal">
+					<av:LayoutAnchorablePane DockWidth="150">
+						<av:LayoutAnchorable ContentId="LocalExplorer" />
+					</av:LayoutAnchorablePane>
+					<av:LayoutDocumentPane />
+				</av:LayoutPanel>
+			</av:LayoutRoot>
 		</av:DockingManager>
+		
 	</DockPanel>
 </Window>

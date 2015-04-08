@@ -1,28 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
-
-using Livet;
+﻿using Livet;
 using Livet.Commands;
 using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
+using MatIDE.ViewModels.Dock;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Collections.ObjectModel;
+using System.Windows;
 
-using MatIDE.Models;
 
 namespace MatIDE.ViewModels
 {
 	public class MainWindowVM : ViewModel
 	{
+		private ObservableCollection<ToolContent>	_tools;
 
 		public MainWindowVM()
 		{
+			Initialize();
 		}
+
+		public ObservableCollection<ToolContent> Tools
+		{
+			get {
+				if ( _tools == null )
+					_tools = new ObservableCollection<ToolContent>();
+				return _tools;
+			}
+		}
+
+
+
+		/*
+
+51         protected abstract void InitializeTools(); 
+52 
+ 
+53         protected DocumentContent GetDocumentByContentId(String contentId) 
+54         { 
+55             return Documents.FirstOrDefault(d => d.ContentId == contentId); 
+56         } 
+57 
+		*/
+
+
+		#region ===== COMMANDS =====
 
 		private ViewModelCommand	_TestCommand;
 
@@ -91,8 +111,11 @@ namespace MatIDE.ViewModels
 		}
 		#endregion
 
+		#endregion
+
 		public void Initialize()
 		{
+			Tools.Add( new LocalExplorerVM() );
 		}
 	}
 }

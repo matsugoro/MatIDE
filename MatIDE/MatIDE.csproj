@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Attributes\ContentPropertyAttribute.cs" />
     <Compile Include="Behaviors\SettingTVBehavior.cs" />
     <Compile Include="Converters\EnumRadioButtonConverter.cs" />
     <Compile Include="Models\AppSetting\SettingEditCommon.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Test\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Dock\ToolContent.cs" />
     <Compile Include="ViewModels\Explorer\ExplorerNodeVM.cs" />
     <Compile Include="ViewModels\LocalExplorerVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
@@ -197,6 +199,7 @@
       <Name>Xceed.Wpf.AvalonDock</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
