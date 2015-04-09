@@ -1,48 +1,185 @@
-﻿using Livet;
+﻿using System;
+using System.Windows;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Livet;
 using Livet.Commands;
 using Livet.Messaging;
-using MatIDE.ViewModels.Dock;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Collections.ObjectModel;
-using System.Windows;
 
+using Microsoft.WindowsAPICodePack.Dialogs;
+
+using MatIDE.ViewModels.Dock;
+using Microsoft.Win32;
+using System.Windows.Input;
 
 namespace MatIDE.ViewModels
 {
 	public class MainWindowVM : ViewModel
 	{
-		private ObservableCollection<ToolContent>	_tools;
+		public static MainWindowVM Instance { get; private set; }
 
+
+
+		private ObservableCollection<ToolViewModel>	_tools;
+		private ObservableCollection<FileViewModel> _files = new ObservableCollection<FileViewModel>();
+		private ReadOnlyObservableCollection<FileViewModel> _readonyFiles = null;
+		private LocalExplorerVM _localExplorer;
+		private FileViewModel _activeDocument = null;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public MainWindowVM()
 		{
-			Initialize();
+			Instance = this;
 		}
 
-		public ObservableCollection<ToolContent> Tools
+		public ObservableCollection<ToolViewModel> Tools
 		{
 			get {
-				if ( _tools == null )
-					_tools = new ObservableCollection<ToolContent>();
+				if ( _tools == null ){
+					_tools = new ObservableCollection<ToolViewModel>();
+					_tools.Add( LocalExplorer );
+				}
 				return _tools;
 			}
 		}
 
+		public ReadOnlyObservableCollection<FileViewModel> Files
+		{
+			get {
+				if ( _readonyFiles == null )
+					_readonyFiles = new ReadOnlyObservableCollection<FileViewModel>(_files);
+				return _readonyFiles;
+			}
+		}
 
+		public FileViewModel ActiveDocument
+		{
+			get {
+				return _activeDocument;
+			}
+			set {
+				if ( _activeDocument != value ){
+					_activeDocument = value;
+					RaisePropertyChanged();
+					if ( ActiveDocumentChanged != null )
+						ActiveDocumentChanged( this, EventArgs.Empty );
+//					CloseCommand.RaiseCanExecuteChanged();
+					CommandManager.InvalidateRequerySuggested();
+				}
+			}
+		}
 
-		/*
+		public LocalExplorerVM LocalExplorer
+		{
+			get {
+				if ( _localExplorer == null )
+					_localExplorer = new LocalExplorerVM();
+				return _localExplorer;
+			}
+		}
 
-51         protected abstract void InitializeTools(); 
-52 
- 
-53         protected DocumentContent GetDocumentByContentId(String contentId) 
-54         { 
-55             return Documents.FirstOrDefault(d => d.ContentId == contentId); 
-56         } 
-57 
-		*/
-
+		public event EventHandler ActiveDocumentChanged;
 
 		#region ===== COMMANDS =====
+
+		#region ===== NewCommand =====
+		private ViewModelCommand	_newCommand = null;
+
+		public ViewModelCommand NewCommand
+		{
+			get {
+				if ( _newCommand == null )
+					_newCommand = new ViewModelCommand( OnNew, CanNew );
+				return _newCommand;
+			}
+		}
+
+		private bool CanNew()
+		{
+			return false;
+		}
+
+		private void OnNew()
+		{
+			_files.Add( new FileViewModel() );
+			ActiveDocument = _files.Last();
+		}
+
+		#endregion 
+
+		#region  ===== OpenCommand =====
+
+		private ViewModelCommand	_openCommand = null;
+
+		public ViewModelCommand OpenCommand
+		{
+			get {
+				if ( _openCommand == null )
+					_openCommand = new ViewModelCommand(OnOpen, CanOpen);
+				return _openCommand;
+			}
+		}
+
+		private bool CanOpen()
+		{
+			return true;
+		}
+
+		private void OnOpen()
+		{
+			var dlg = new OpenFileDialog();
+			if ( dlg.ShowDialog().GetValueOrDefault() ){
+				var fileViewModel = Open(dlg.FileName);
+				ActiveDocument = fileViewModel;
+			}
+		}
+
+		public FileViewModel Open(string filepath)
+		{
+			var fileViewModel = _files.FirstOrDefault(fm => fm.FilePath == filepath);
+
+			if ( fileViewModel != null )
+				return fileViewModel;
+			fileViewModel = new FileViewModel(filepath);
+			_files.Add(fileViewModel);
+			return fileViewModel;
+		}
+
+		#endregion
+
+		#region ===== CloseCommand =====
+
+		private ViewModelCommand	_closeCommand = null;
+
+		public ViewModelCommand CloseCommand
+		{
+			get {
+				if ( _closeCommand == null )
+					_closeCommand = new ViewModelCommand( OnClose, CanClose );
+				return _closeCommand;
+			}
+		}
+
+		private bool CanClose()
+		{
+			if ( ActiveDocument == null )
+				return false;
+			return true;
+		}
+
+		private void OnClose()
+		{
+			Close(ActiveDocument);
+		}
+
+
+
+
+		#endregion
+
+		#region ===== TestCommand =====
 
 		private ViewModelCommand	_TestCommand;
 
@@ -60,8 +197,9 @@ namespace MatIDE.ViewModels
 			MatIDE.Views.testview view = new Views.testview();
 			view.Show();
 		}
+		#endregion
 
-		#region DoCommand
+		#region ===== SettingCommand =====
 		private ViewModelCommand _SettingCommand;
 
 		public ViewModelCommand SettingCommand
@@ -115,7 +253,23 @@ namespace MatIDE.ViewModels
 
 		public void Initialize()
 		{
-			Tools.Add( new LocalExplorerVM() );
+		}
+
+
+		internal void Close( FileViewModel fileToClose )
+		{
+			if ( fileToClose.IsDirty ){
+				/*
+				var res = MessageBox.Show(string.Format("Save changes for file '{0}'?", fileToClose.FileName), "AvalonDock Test App", MessageBoxButton.YesNoCancel);
+				if (res == MessageBoxResult.Cancel)
+					return;
+				if (res == MessageBoxResult.Yes)
+				{
+					Save(fileToClose);
+				}
+				*/
+			}
+			_files.Remove( fileToClose );
 		}
 	}
 }

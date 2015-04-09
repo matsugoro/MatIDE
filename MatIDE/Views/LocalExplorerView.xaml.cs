@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MatIDE.Views.UC
+namespace MatIDE.Views
 {
 	/// <summary>
 	/// LocalExplorerView.xaml の相互作用ロジック

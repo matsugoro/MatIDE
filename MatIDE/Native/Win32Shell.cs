@@ -9,24 +9,21 @@ namespace MatIDE.Native
 {
 	public class Win32Shell
 	{
+		#region 構造体定義
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SHFILEINFO
 		{
 			public IntPtr	hIcon;
 			public IntPtr	iIcon;
 			public uint		dwAttributes;
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=260)]
 			public string	szDisplayName;
-			[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=80)]
 			public string	szTypeName;
 		};
+		#endregion
 
-
-
-
-
-
-		// SHGetFileInfo用のフラグ
+		#region SHGetFileInfo用のフラグ
 		public const uint SHGFI_ADDOVERLAYS			= 0x000000020;	// Overlay icon
 		public const uint SHGFI_ATTR_SPECIFIED		= 0x000020000;	// 
 		public const uint SHGFI_ATTRIBUTES			= 0x000000800;	// get attributes
@@ -45,6 +42,7 @@ namespace MatIDE.Native
 		public const uint SHGFI_SYSICONINDEX		= 0x000004000;
 		public const uint SHGFI_TYPENAME			= 0x000000400;
 		public const uint SHGFI_USEFILEATTRIBUTES	= 0x000000010;
+		#endregion
 
 		[DllImport("shell32.dll")]
 		public static extern IntPtr SHGetFileInfo( string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags );
@@ -314,24 +312,6 @@ namespace MatIDE.Native
 		public static readonly Guid FOLDERID_Windows				{F38BF404-1D43-42F2-9305-67DE0B28FC23}
 		*/
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		[DllImport("shell32.dll")]
 		public static extern int SHGetKnownFolderPath( [MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr pszPath );
 

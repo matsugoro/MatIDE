@@ -1,11 +1,12 @@
 ﻿using System;
 using Livet;
 using MatIDE.ViewModels.Explorer;
+using MatIDE.Docking;
 using MatIDE.ViewModels.Dock;
 
 namespace MatIDE.ViewModels
 {
-	public class LocalExplorerVM : ToolContent
+	public class LocalExplorerVM : ToolViewModel
 	{
 		ExplorerNodeVMCollection<ExplorerNodeVM>	_rootItems;
 

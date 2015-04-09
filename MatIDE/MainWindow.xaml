@@ -3,17 +3,23 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-		xmlns:vv="clr-namespace:MatIDE.Views.UC"
+		xmlns:dc="clr-namespace:MatIDE.Docking"
+		xmlns:vv="clr-namespace:MatIDE.Views"
 		xmlns:vw="clr-namespace:MatIDE.Views.Setting"
 		xmlns:vm="clr-namespace:MatIDE.ViewModels"
+		xmlns:cv="clr-namespace:MatIDE.Converters"
 		xmlns:av="http://schemas.xceed.com/wpf/xaml/avalondock"
 		Name="Main"
 		Title="MainWindow" WindowState="Maximized" Height="1123.286" Width="1022.842">
 
-	<!-- データコンテキストの設定 -->
 	<Window.DataContext>
 		<vm:MainWindowVM />
 	</Window.DataContext>
+
+	<Window.Resources>
+		<cv:ActiveDocumentConverter x:Key="ActiveDocumentConverter"/>
+		<av:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+	</Window.Resources>
 
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger MessageKey="ShowCommand" Messenger="{Binding Messenger}">
@@ -22,21 +28,21 @@
 	</i:Interaction.Triggers>
 
 	<DockPanel Name="GeneralDock">
-		<Menu DockPanel.Dock="Top" Height="23" VerticalAlignment="Center" BorderThickness="0">
-			<MenuItem Header="ファイル(_F)" Height="23">
-				<MenuItem Header="新規作成(_N)">
-					<MenuItem Header="プロジェクト(_P)" InputGestureText="Shift+Ctrl+N" />
-					<MenuItem Header="ファイル(_F)" InputGestureText="Ctrl+N" />
+		<Menu DockPanel.Dock="Top" Height="23" VerticalAlignment="Center">
+			<MenuItem Header="_File" Height="23">
+				<MenuItem Header="_New">
+					<MenuItem Header="_Project" InputGestureText="Shift+Ctrl+N" />
+					<MenuItem Header="_File" InputGestureText="Ctrl+N" Command="{Binding NewCommand}" />
 					<MenuItem Header="既存のディレクトリからプロジェクトを作成(_E)" />
 				</MenuItem>
-				<MenuItem Header="開く(_O)">
-					<MenuItem Header="ファイル(_O)" InputGestureText="Ctrl+O" />
+				<MenuItem Header="_Open">
+					<MenuItem Header="_File..." InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
 					<MenuItem Header="プロジェクト(_P)..." InputGestureText="Shift+Ctrl+O" />
 				</MenuItem>
 				<Separator />
-				<MenuItem Header="プロジェクトを閉じる" />
+				<MenuItem Header="Close project" />
 				<Separator />
-				<MenuItem Header="閉じる(_C)" />
+				<MenuItem Header="_Close" Command="{Binding CloseCommand}" />
 				<MenuItem Header="上書き保存(_S)" InputGestureText="Ctrl+S" />
 				<MenuItem Header="名前を付けて保存(_A)..." />
 				<MenuItem Header="すべてを保存" InputGestureText="Ctrl+Shift+S" />
@@ -270,7 +276,7 @@
 				<MenuItem Header="ファンクションキー(_F)" />
 				<Separator />
 				<MenuItem Header="プロジェクトファイルビュー" />
-				<MenuItem Header="ローカルファイルビュー" />
+				<MenuItem Header="LocalExplorer" IsChecked="{Binding LocalExplorer.IsVisible, Mode=TwoWay}" IsCheckable="True" />
 				<MenuItem Header="端末ウィンドウ">
 					<MenuItem Header="Dummy3" />
 				</MenuItem>
@@ -347,28 +353,58 @@
 		</StatusBar>
 
 		<av:DockingManager x:Name="_dockingManager"
-						   AnchorablesSource="{Binding Tools}">
-
-			<av:DockingManager.LayoutItemContainerStyle>
-				<Style TargetType="{x:Type av:LayoutItem}">
-					<Setter Property="Title" Value="{Binding Model.Title}" />
-				</Style>
-			</av:DockingManager.LayoutItemContainerStyle>
+						   BorderThickness="0"
+						   AnchorablesSource="{Binding Tools}"
+						   DocumentsSource="{Binding Files}"
+						   ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}" Margin="0,3,0,3">
 
 			<av:DockingManager.LayoutItemTemplateSelector>
-				
+				<dc:PanesTemplateSelector>
+					<dc:PanesTemplateSelector.FileViewTemplate>
+						<DataTemplate>
+							<TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"/>
+						</DataTemplate>
+					</dc:PanesTemplateSelector.FileViewTemplate>
+					<dc:PanesTemplateSelector.LocalExplorerViewTemplate>
+						<DataTemplate>
+							<vv:LocalExplorerView />
+						</DataTemplate>
+					</dc:PanesTemplateSelector.LocalExplorerViewTemplate>
+				</dc:PanesTemplateSelector>
 			</av:DockingManager.LayoutItemTemplateSelector>
-			
-			
+
+			<av:DockingManager.LayoutItemContainerStyleSelector>
+				<dc:PanesStyleSelector>
+					<dc:PanesStyleSelector.ToolStyle>
+						<Style TargetType="{x:Type av:LayoutAnchorableItem}">
+							<Setter Property="Title" Value="{Binding Model.Title}"/>
+							<Setter Property="IconSource" Value="{Binding Model.Icon}"/>
+							<Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={x:Static Visibility.Hidden}}"/>
+							<Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+							<Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}"/>
+							<Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}"/>
+						</Style>
+					</dc:PanesStyleSelector.ToolStyle>
+					<dc:PanesStyleSelector.FileStyle>
+						<Style TargetType="{x:Type av:LayoutItem}">
+							<Setter Property="Title" Value="{Binding Model.Title}"/>
+							<Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>
+							<Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}"/>
+							<Setter Property="IconSource" Value="{Binding Model.Icon}"/>
+							<Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+						</Style>
+					</dc:PanesStyleSelector.FileStyle>
+				</dc:PanesStyleSelector>
+			</av:DockingManager.LayoutItemContainerStyleSelector>
+
 			<av:LayoutRoot>
 				<av:LayoutPanel Orientation="Horizontal">
-					<av:LayoutAnchorablePane DockWidth="150">
-						<av:LayoutAnchorable ContentId="LocalExplorer" />
-					</av:LayoutAnchorablePane>
+					<av:LayoutAnchorablePane DockWidth="150" />
 					<av:LayoutDocumentPane />
 				</av:LayoutPanel>
 			</av:LayoutRoot>
 		</av:DockingManager>
-		
+
 	</DockPanel>
 </Window>
+

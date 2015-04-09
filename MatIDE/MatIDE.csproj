@@ -85,17 +85,25 @@
     </ApplicationDefinition>
     <Compile Include="Attributes\ContentPropertyAttribute.cs" />
     <Compile Include="Behaviors\SettingTVBehavior.cs" />
+    <Compile Include="Converters\ActiveDocumentConverter.cs" />
     <Compile Include="Converters\EnumRadioButtonConverter.cs" />
+    <Compile Include="Docking\PanesStyleSelector.cs" />
+    <Compile Include="Docking\PanesTemplateSelector.cs" />
     <Compile Include="Models\AppSetting\SettingEditCommon.cs" />
     <Compile Include="Models\AppSetting\SettingGeneral.cs" />
     <Compile Include="Models\AppSetting\SettingTab.cs" />
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\AppSetting\Settings.cs" />
     <Compile Include="Native\Win32Shell.cs" />
+    <Compile Include="Test\testview.xaml.cs">
+      <DependentUpon>testview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Test\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Dock\ToolContent.cs" />
+    <Compile Include="ViewModels\Dock\FileViewModel.cs" />
+    <Compile Include="ViewModels\Dock\PaneViewModel.cs" />
+    <Compile Include="ViewModels\Dock\ToolViewModel.cs" />
     <Compile Include="ViewModels\Explorer\ExplorerNodeVM.cs" />
     <Compile Include="ViewModels\LocalExplorerVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
@@ -105,6 +113,9 @@
     <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\SettingVMBase.cs" />
     <Compile Include="ViewModels\testviewViewModel.cs" />
+    <Compile Include="Views\LocalExplorerView.xaml.cs">
+      <DependentUpon>LocalExplorerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Setting\SetEditCommon.xaml.cs">
       <DependentUpon>SetEditCommon.xaml</DependentUpon>
     </Compile>
@@ -116,12 +127,6 @@
     </Compile>
     <Compile Include="Views\Setting\SettingWnd.xaml.cs">
       <DependentUpon>SettingWnd.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\testview.xaml.cs">
-      <DependentUpon>testview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UC\LocalExplorerView.xaml.cs">
-      <DependentUpon>LocalExplorerView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -135,9 +140,17 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Test\testview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Test\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LocalExplorerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Setting\SetEditCommon.xaml">
       <SubType>Designer</SubType>
@@ -152,14 +165,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Setting\SettingWnd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\testview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UC\LocalExplorerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,7 +204,9 @@
       <Name>Xceed.Wpf.AvalonDock</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\document.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
