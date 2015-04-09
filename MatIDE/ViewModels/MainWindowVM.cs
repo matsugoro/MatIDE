@@ -62,11 +62,11 @@ namespace MatIDE.ViewModels
 			set {
 				if ( _activeDocument != value ){
 					_activeDocument = value;
+
 					RaisePropertyChanged();
 					if ( ActiveDocumentChanged != null )
 						ActiveDocumentChanged( this, EventArgs.Empty );
-//					CloseCommand.RaiseCanExecuteChanged();
-					CommandManager.InvalidateRequerySuggested();
+					this.CloseCommand.RaiseCanExecuteChanged();
 				}
 			}
 		}
@@ -98,7 +98,7 @@ namespace MatIDE.ViewModels
 
 		private bool CanNew()
 		{
-			return false;
+			return true;
 		}
 
 		private void OnNew()
@@ -164,7 +164,7 @@ namespace MatIDE.ViewModels
 
 		private bool CanClose()
 		{
-			if ( ActiveDocument == null )
+			if ( _activeDocument == null )
 				return false;
 			return true;
 		}

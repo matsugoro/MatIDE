@@ -27,6 +27,7 @@ namespace MatIDE
 		protected override void OnStartup( StartupEventArgs e )
 		{
 			base.OnStartup( e );
+			Livet.DispatcherHelper.UIDispatcher = this.Dispatcher;
 			AppSet		= new AppSettings();
 			FileImage	= new Dictionary<string,ImageSource>();
 		}
