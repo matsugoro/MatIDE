@@ -21,6 +21,11 @@
 		<av:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 	</Window.Resources>
 
+	<Window.InputBindings>
+		<KeyBinding Command="{Binding NewCommand}" Key="N" Modifiers="Control" />
+		<KeyBinding Command="{Binding OpenCommand}" Key="O" Modifiers="Control" />
+	</Window.InputBindings>
+
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger MessageKey="ShowCommand" Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction WindowType="{x:Type vw:SettingWnd}" Mode="Modal" />
@@ -28,23 +33,20 @@
 	</i:Interaction.Triggers>
 
 	<DockPanel Name="GeneralDock">
-		<Menu DockPanel.Dock="Top" Height="23" VerticalAlignment="Center">
+		<Menu DockPanel.Dock="Top" Height="23">
 			<MenuItem Header="_File" Height="23">
-				<MenuItem Header="_New">
-					<MenuItem Header="_Project" InputGestureText="Shift+Ctrl+N" />
-					<MenuItem Header="_File" InputGestureText="Ctrl+N" Command="{Binding NewCommand}" />
-					<MenuItem Header="既存のディレクトリからプロジェクトを作成(_E)" />
-				</MenuItem>
-				<MenuItem Header="_Open">
-					<MenuItem Header="_File..." InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
-					<MenuItem Header="プロジェクト(_P)..." InputGestureText="Shift+Ctrl+O" />
-				</MenuItem>
+				<MenuItem Header="New _File" InputGestureText="Ctrl+N" Command="{Binding NewCommand}" />
+				<MenuItem Header="New _Project" InputGestureText="Shift+Ctrl+N" />
+				<MenuItem Header="Create project from directory" />
+				<Separator />
+				<MenuItem Header="_Open File..." InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
+				<MenuItem Header="Open Project..." InputGestureText="Shift+Ctrl+O" />
 				<Separator />
 				<MenuItem Header="Close project" />
 				<Separator />
 				<MenuItem Header="_Close" Command="{Binding CloseCommand}" />
-				<MenuItem Header="上書き保存(_S)" InputGestureText="Ctrl+S" />
-				<MenuItem Header="名前を付けて保存(_A)..." />
+				<MenuItem Header="_Save" InputGestureText="Ctrl+S" />
+				<MenuItem Header="Save _As..." />
 				<MenuItem Header="すべてを保存" InputGestureText="Ctrl+Shift+S" />
 				<Separator />
 				<MenuItem Header="印刷(_P)..." InputGestureText="Ctrl+P" />
@@ -60,7 +62,7 @@
 				<Separator />
 				<MenuItem Header="MatIDEの終了(_X)" Command="{Binding QuitCommand}" CommandParameter="{Binding ElementName=Main}" />
 			</MenuItem>
-			<MenuItem Header="編集(_E)">
+			<MenuItem Header="_Edit">
 				<MenuItem Header="元に戻す(_U)" InputGestureText="Ctrl+Z" />
 				<MenuItem Header="やり直し" InputGestureText="Ctrl+Y" />
 				<Separator />
@@ -251,7 +253,7 @@
 					<MenuItem Header="ブロックの挿入" />
 				</MenuItem>
 			</MenuItem>
-			<MenuItem Header="表示(_V)">
+			<MenuItem Header="_View">
 				<MenuItem Header="アプリケーションの外観(_A)">
 					<MenuItem Header="Windows _2000" />
 					<MenuItem Header="Windows _XP" />
@@ -272,8 +274,8 @@
 					<Separator />
 					<MenuItem Header="カスタマイズ" />
 				</MenuItem>
-				<MenuItem Header="ステータスバー(_S)" />
-				<MenuItem Header="ファンクションキー(_F)" />
+				<MenuItem Header="_Statusbar" IsChecked="{Binding IsVisibleStatusbar, Mode=TwoWay}" IsCheckable="True" />
+				<MenuItem Header="_Function Keys" IsChecked="{Binding IsVisibleFunckyBar, Mode=TwoWay}" IsCheckable="True" />
 				<Separator />
 				<MenuItem Header="プロジェクトファイルビュー" />
 				<MenuItem Header="LocalExplorer" IsChecked="{Binding LocalExplorer.IsVisible, Mode=TwoWay}" IsCheckable="True" />
@@ -294,7 +296,7 @@
 				<MenuItem Header="スペース文字を表示" />
 				<MenuItem Header="TAB文字を表示" />
 			</MenuItem>
-			<MenuItem Header="検索(_S)">
+			<MenuItem Header="_Search">
 				<MenuItem Header="検索(_F)" />
 				<MenuItem Header="次を検索" />
 				<MenuItem Header="前を検索" />
@@ -306,7 +308,7 @@
 				<Separator />
 				<MenuItem Header="対括弧の検索" />
 			</MenuItem>
-			<MenuItem Header="ツール(_T)">
+			<MenuItem Header="_Tools">
 				<MenuItem Header="キーマクロの記録開始" />
 				<MenuItem Header="キーマクロの保存" />
 				<MenuItem Header="キーマクロの読み込み" />
@@ -323,7 +325,7 @@
 				<Separator />
 				<MenuItem Header="環境設定(_O)" Command="{Binding SettingCommand}" />
 			</MenuItem>
-			<MenuItem Header="ウィンドウ(_W)">
+			<MenuItem Header="_Window">
 				<MenuItem Header="分割" />
 				<MenuItem Header="フローティング" />
 				<MenuItem Header="すべてフローティング表示" />
@@ -340,23 +342,57 @@
 				<Separator />
 				<MenuItem Header="ウィンドウ" />
 			</MenuItem>
-			<MenuItem Header="ヘルプ(_H)">
+			<MenuItem Header="_Help">
 				<MenuItem Header="バージョン情報(_A)" />
 			</MenuItem>
-			<MenuItem Header="デバッグ(_D)">
-				<MenuItem Header="テスト(_T)" Command="{Binding TestWinCommand}" />
+			<MenuItem Header="_Debug">
+				<MenuItem Header="_Test" Command="{Binding TestWinCommand}" />
 			</MenuItem>
 		</Menu>
-		<StatusBar DockPanel.Dock="Bottom">
+
+		<StatusBar DockPanel.Dock="Bottom" Name="statusBar" Visibility="{Binding VisibilityStatusbar}">
 			<StatusBarItem DockPanel.Dock="Right">Item2</StatusBarItem>
 			<StatusBarItem DockPanel.Dock="Left" >Item1</StatusBarItem>
 		</StatusBar>
+
+		<Grid DockPanel.Dock="Bottom" Name="fkeyBar" Visibility="{Binding VisibilityFunckeyBar}" >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" Content="F1" />
+			<Button Grid.Column="1" Content="F2" />
+			<Button Grid.Column="2" Content="F3" />
+			<Button Grid.Column="3" Content="F4" />
+			<Button Grid.Column="4" Content="F5" />
+			<Button Grid.Column="5" Content="F6" />
+			<Button Grid.Column="6" Content="F7" />
+			<Button Grid.Column="7" Content="F8" />
+			<Button Grid.Column="8" Content="F9" />
+			<Button Grid.Column="9" Content="F10" />
+			<Button Grid.Column="10" Content="F11" />
+			<Button Grid.Column="11" Content="F12" />
+		</Grid>
 
 		<av:DockingManager x:Name="_dockingManager"
 						   BorderThickness="0"
 						   AnchorablesSource="{Binding Tools}"
 						   DocumentsSource="{Binding Files}"
-						   ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}" Margin="0,3,0,3">
+						   ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
+
+			<av:DockingManager.Theme>
+				<av:ExpressionLightTheme />
+			</av:DockingManager.Theme>
 
 			<av:DockingManager.LayoutItemTemplateSelector>
 				<dc:PanesTemplateSelector>
@@ -365,6 +401,13 @@
 							<TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"/>
 						</DataTemplate>
 					</dc:PanesTemplateSelector.FileViewTemplate>
+
+					<dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
+						<DataTemplate>
+							<TreeView />
+						</DataTemplate>
+					</dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
+					
 					<dc:PanesTemplateSelector.LocalExplorerViewTemplate>
 						<DataTemplate>
 							<vv:LocalExplorerView />
@@ -399,8 +442,9 @@
 
 			<av:LayoutRoot>
 				<av:LayoutPanel Orientation="Horizontal">
-					<av:LayoutAnchorablePane DockWidth="150" />
+					<av:LayoutAnchorablePane DockWidth="150"  />
 					<av:LayoutDocumentPane />
+					<av:LayoutAnchorablePane DockWidth="150" />
 				</av:LayoutPanel>
 			</av:LayoutRoot>
 		</av:DockingManager>

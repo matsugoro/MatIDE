@@ -16,8 +16,8 @@ namespace MatIDE.ViewModels.Dock
 	{
 		static ImageSourceConverter ISC = new ImageSourceConverter();
 
-		private string	_filePath = null;
-		private string	_textContent = string.Empty;
+		private string _filePath = null;
+		private string _textContent = string.Empty;
 		private bool _isDirty = false;
 
 		/// <summary>
@@ -43,6 +43,9 @@ namespace MatIDE.ViewModels.Dock
 
 		#region ===== IsDirty =====
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool IsDirty
 		{
 			get {
@@ -60,6 +63,9 @@ namespace MatIDE.ViewModels.Dock
 
 		#region ===== FilePath =====
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string FilePath
 		{
 			get {
@@ -81,6 +87,9 @@ namespace MatIDE.ViewModels.Dock
 		}
 		#endregion
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string FileName
 		{
 			get {
@@ -92,6 +101,9 @@ namespace MatIDE.ViewModels.Dock
 
 		#region ===== TextContent =====
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string TextContent
 		{
 			get {
@@ -141,13 +153,10 @@ namespace MatIDE.ViewModels.Dock
 		RelayCommand _saveAsCommand = null;
 		public ICommand SaveAsCommand
 		{
-			get
-			{
-				if (_saveAsCommand == null)
-				{
+			get {
+				if ( _saveAsCommand == null ){
 					_saveAsCommand = new RelayCommand((p) => OnSaveAs(p), (p) => CanSaveAs(p));
 				}
-
 				return _saveAsCommand;
 			}
 		}
@@ -163,33 +172,6 @@ namespace MatIDE.ViewModels.Dock
 		}
 		*/
 		#endregion
-
-		/*
-		#region CloseCommand
-
-		private ViewModelCommand	_closeCommand = null;
-
-		public ViewModelCommand CloseCommand
-		{
-			get {
-				if ( _closeCommand == null )
-					_closeCommand = new ViewModelCommand(OnClose, CanClose);
-				return _closeCommand;
-			}
-		}
-
-		private bool CanClose()
-		{
-			return true;
-		}
-
-		private void OnClose()
-		{
-			MainWindowVM.Instance.Close(this);
-		}
-
-		#endregion
-		*/
 
 
 	}

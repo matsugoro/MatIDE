@@ -8,9 +8,11 @@
 		xmlns:vm="clr-namespace:MatIDE.ViewModels"
 		Title="testview" Height="350" Width="525">
 
+	<!--
 	<Window.DataContext>
 		<vm:testviewViewModel/>
 	</Window.DataContext>
+	-->
 
 	<i:Interaction.Triggers>
 		<i:EventTrigger EventName="ContentRendered">
