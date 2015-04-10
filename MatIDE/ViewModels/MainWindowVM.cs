@@ -150,6 +150,7 @@ namespace MatIDE.ViewModels
 			set {
 				if ( _activeDocument != value ){
 					_activeDocument = value;
+
 					RaisePropertyChanged();
 					if ( ActiveDocumentChanged != null )
 						ActiveDocumentChanged( this, EventArgs.Empty );
@@ -263,7 +264,7 @@ namespace MatIDE.ViewModels
 
 		private bool CanClose()
 		{
-			if ( ActiveDocument == null )
+			if ( _activeDocument == null )
 				return false;
 			return true;
 		}
