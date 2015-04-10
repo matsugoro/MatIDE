@@ -14,7 +14,7 @@ namespace MatIDE.Native
 		public struct SHFILEINFO
 		{
 			public IntPtr	hIcon;
-			public IntPtr	iIcon;
+			public int		iIcon;
 			public uint		dwAttributes;
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=260)]
 			public string	szDisplayName;

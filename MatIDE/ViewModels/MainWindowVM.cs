@@ -270,6 +270,8 @@ namespace MatIDE.ViewModels
 				*/
 			}
 			_files.Remove( fileToClose );
+			if ( _files.Count() == 0 )
+				ActiveDocument = null;
 		}
 	}
 }
