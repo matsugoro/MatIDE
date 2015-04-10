@@ -18,6 +18,7 @@ namespace MatIDE.Docking
 		}
 
 		public DataTemplate LocalExplorerViewTemplate	{ get; set; }
+		public DataTemplate ProjectExplorerViewTemplate	{ get; set; }
 		public DataTemplate FileViewTemplate			{ get; set; }
 
 		public override DataTemplate SelectTemplate( object item, DependencyObject container )
@@ -26,6 +27,9 @@ namespace MatIDE.Docking
 
 			if ( item is LocalExplorerVM )
 				return LocalExplorerViewTemplate;
+
+			if ( item is ProjectExplorerVM )
+				return ProjectExplorerViewTemplate;
 
 			if ( item is FileViewModel )
 				return FileViewTemplate;

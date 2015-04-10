@@ -14,7 +14,7 @@ namespace MatIDE.Native
 		public struct SHFILEINFO
 		{
 			public IntPtr	hIcon;
-			public IntPtr	iIcon;
+			public int		iIcon;
 			public uint		dwAttributes;
 			[MarshalAs(UnmanagedType.ByValTStr, SizeConst=260)]
 			public string	szDisplayName;
@@ -181,7 +181,7 @@ namespace MatIDE.Native
 			MyPictures = 0x0027,  
 			NetAndDialUpConnections = 0x0031,  
 		}
-	
+
 		public static readonly Guid	FOLDERID_ComputerFolder		= new Guid("{0AC0837C-BBF8-452A-850D-79D08E667CA7}");
 		public static readonly Guid	FOLDERID_Desktop			= new Guid("{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}");
 		public static readonly Guid	FOLDERID_Documents			= new Guid("{FDD39AD0-238F-46AF-ADB4-6C85480369C7}");

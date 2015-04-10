@@ -7,6 +7,11 @@ using System.Windows.Data;
 
 namespace MatIDE.Attributes
 {
+	//=========================================================================
+	/// <summary>
+	/// 
+	/// </summary>
+	//=========================================================================
 	[AttributeUsage(AttributeTargets.Property, Inherited=true)]
 	public class ContentPropertyAttribute : Attribute
 	{

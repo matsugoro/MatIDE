@@ -11,9 +11,15 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using MatIDE.ViewModels.Dock;
 using Microsoft.Win32;
 using System.Windows.Input;
+using System.Windows.Data;
 
 namespace MatIDE.ViewModels
 {
+	//=========================================================================
+	/// <summary>
+	/// 
+	/// </summary>
+	//=========================================================================
 	public class MainWindowVM : ViewModel
 	{
 		public static MainWindowVM Instance { get; private set; }
@@ -24,6 +30,7 @@ namespace MatIDE.ViewModels
 		private ObservableCollection<FileViewModel> _files = new ObservableCollection<FileViewModel>();
 		private ReadOnlyObservableCollection<FileViewModel> _readonyFiles = null;
 		private LocalExplorerVM _localExplorer;
+		private ProjectExplorerVM _projectExplorer;
 		private FileViewModel _activeDocument = null;
 
 		/// <summary>
@@ -34,12 +41,93 @@ namespace MatIDE.ViewModels
 			Instance = this;
 		}
 
+		#region ===== Visibility Functionkeys =====
+		public bool IsVisibleFunckyBar
+		{
+			get {
+				return ((App)Application.Current).AppSet.General.ShowFunctionKeys;
+			}
+			set {
+				if ( IsVisibleFunckyBar != value ){
+					((App)Application.Current).AppSet.General.ShowFunctionKeys = value;
+					RaisePropertyChanged();
+					RaisePropertyChanged("VisibilityFunckeyBar");
+				}
+			}
+		}
+
+
+		public Visibility VisibilityFunckeyBar
+		{
+			get {
+				return ((App)Application.Current).AppSet.General.ShowFunctionKeys ? Visibility.Visible : Visibility.Collapsed;
+			}
+			set {
+				if ( VisibilityFunckeyBar != value ){
+					if ( value == Visibility.Visible )
+						((App)Application.Current).AppSet.General.ShowFunctionKeys = true;
+					else
+						((App)Application.Current).AppSet.General.ShowFunctionKeys = false;
+					RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region ===== Visibility Statusbar =====
+
+		public bool IsVisibleStatusbar
+		{
+			get {
+				return ((App)Application.Current).AppSet.General.ShowStatusBar;
+			}
+			set {
+				if ( IsVisibleStatusbar != value ){
+					((App)Application.Current).AppSet.General.ShowStatusBar = value;
+					RaisePropertyChanged();
+					RaisePropertyChanged("VisibilityStatusbar");
+				}
+			}
+		}
+
+		public Visibility VisibilityStatusbar
+		{
+			get {
+				return ((App)Application.Current).AppSet.General.ShowStatusBar ? Visibility.Visible : Visibility.Collapsed;
+			}
+			set {
+				if ( VisibilityStatusbar != value ){
+					if ( value == Visibility.Visible )
+						((App)Application.Current).AppSet.General.ShowStatusBar = true;
+					else
+						((App)Application.Current).AppSet.General.ShowStatusBar = false;
+					RaisePropertyChanged();
+				}
+			}
+		}
+
+
+
+
+
+		#endregion
+
+
+
+
+
+
+
+
+
 		public ObservableCollection<ToolViewModel> Tools
 		{
 			get {
 				if ( _tools == null ){
 					_tools = new ObservableCollection<ToolViewModel>();
 					_tools.Add( LocalExplorer );
+					_tools.Add( ProjectExplorer );
 				}
 				return _tools;
 			}
@@ -65,8 +153,7 @@ namespace MatIDE.ViewModels
 					RaisePropertyChanged();
 					if ( ActiveDocumentChanged != null )
 						ActiveDocumentChanged( this, EventArgs.Empty );
-//					CloseCommand.RaiseCanExecuteChanged();
-					CommandManager.InvalidateRequerySuggested();
+					CloseCommand.RaiseCanExecuteChanged();
 				}
 			}
 		}
@@ -79,6 +166,18 @@ namespace MatIDE.ViewModels
 				return _localExplorer;
 			}
 		}
+
+		public ProjectExplorerVM ProjectExplorer
+		{
+			get {
+				if ( _projectExplorer == null )
+					_projectExplorer = new ProjectExplorerVM();
+				return _projectExplorer;
+			}
+		}
+
+
+
 
 		public event EventHandler ActiveDocumentChanged;
 
@@ -98,7 +197,7 @@ namespace MatIDE.ViewModels
 
 		private bool CanNew()
 		{
-			return false;
+			return true;
 		}
 
 		private void OnNew()
@@ -270,6 +369,8 @@ namespace MatIDE.ViewModels
 				*/
 			}
 			_files.Remove( fileToClose );
+			if ( _files.Count() == 0 )
+				ActiveDocument = null;
 		}
 	}
 }

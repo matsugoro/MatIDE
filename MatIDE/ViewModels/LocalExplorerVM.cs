@@ -21,7 +21,6 @@ namespace MatIDE.ViewModels
 					_rootItems = new ExplorerNodeVMCollection<ExplorerNodeVM>();
 					_rootItems.Add(new ExplorerSFNodesVM(MatIDE.Native.Win32Shell.FOLDERID_Links));
 					_rootItems.Add(new ExplorerPCNodeVM() );
-//					_rootItems.Add(new ExplorerNodeVM("Network", Environment.GetFolderPath(Environment.SpecialFolder.NetworkShortcuts)) );
 				}
 				return _rootItems;
 			}
