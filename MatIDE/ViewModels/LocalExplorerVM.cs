@@ -10,8 +10,9 @@ namespace MatIDE.ViewModels
 	{
 		ExplorerNodeVMCollection<ExplorerNodeVM>	_rootItems;
 
-		public LocalExplorerVM() : base("LocalExplorer")
+		public LocalExplorerVM() : base("LocalExplorer", "TPaneLeft")
 		{
+			ContentId = "LocalExplorer";
 		}
 
 		public ExplorerNodeVMCollection<ExplorerNodeVM> RootItems

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace MatIDE.ViewModels.Dock
 {
-
 	public class ToolViewModel : PaneViewModel
 	{
 		private bool _isVisible = true;
 
-		public ToolViewModel( string name )
+		public ToolViewModel( string name, string initialPane )
 		{
 			Name = name;
+			InitialPane = initialPane;
 			Title = name;
 		}
 
@@ -22,6 +22,14 @@ namespace MatIDE.ViewModels.Dock
 			get;
 			private set;
 		}
+
+		public string InitialPane
+		{
+			get;
+			private set;
+		}
+
+
 
 		public bool IsVisible
 		{

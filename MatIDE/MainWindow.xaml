@@ -277,15 +277,15 @@
 				<MenuItem Header="_Statusbar" IsChecked="{Binding IsVisibleStatusbar, Mode=TwoWay}" IsCheckable="True" />
 				<MenuItem Header="_Function Keys" IsChecked="{Binding IsVisibleFunckyBar, Mode=TwoWay}" IsCheckable="True" />
 				<Separator />
-				<MenuItem Header="プロジェクトファイルビュー" />
+				<MenuItem Header="ProjectFileView" IsChecked="{Binding ProjectExplorer.IsVisible, Mode=TwoWay}" IsCheckable="True" />
 				<MenuItem Header="LocalExplorer" IsChecked="{Binding LocalExplorer.IsVisible, Mode=TwoWay}" IsCheckable="True" />
 				<MenuItem Header="端末ウィンドウ">
 					<MenuItem Header="Dummy3" />
 				</MenuItem>
-				<MenuItem Header="アウトライン ウィンドウ" />
-				<MenuItem Header="ブックマーク ウィンドウ" />
-				<MenuItem Header="出力ウィンドウ" />
-				<MenuItem Header="検索結果" />
+				<MenuItem Header="OutlineWindow" IsChecked="{Binding OutlineWindow.IsVisible, Mode=TwoWay}" IsCheckable="True" />
+				<MenuItem Header="BookmarkWindow" IsChecked="{Binding BookmarkWindow.IsVisible, Mode=TwoWay}" IsCheckable="True"/>
+				<MenuItem Header="OutputWindow" IsChecked="{Binding OutputWindow.IsVisible, Mode=TwoWay}" IsCheckable="True" />
+				<MenuItem Header="FindResult" IsChecked="{Binding FindResult.IsVisible, Mode=TwoWay}" IsCheckable="True" />
 				<Separator />
 				<MenuItem Header="折り返し方法">
 					<MenuItem Header="折り返さない" />
@@ -393,7 +393,6 @@
 			<av:DockingManager.Theme>
 				<av:ExpressionLightTheme />
 			</av:DockingManager.Theme>
-
 			<av:DockingManager.LayoutItemTemplateSelector>
 				<dc:PanesTemplateSelector>
 					<dc:PanesTemplateSelector.FileViewTemplate>
@@ -401,13 +400,31 @@
 							<TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"/>
 						</DataTemplate>
 					</dc:PanesTemplateSelector.FileViewTemplate>
-
 					<dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
 						<DataTemplate>
 							<TreeView />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
-					
+					<dc:PanesTemplateSelector.OutlineWindowViewTemplate>
+						<DataTemplate>
+							<TreeView />
+						</DataTemplate>
+					</dc:PanesTemplateSelector.OutlineWindowViewTemplate>
+					<dc:PanesTemplateSelector.BookmarkWindowViewTemplate>
+						<DataTemplate>
+							<TextBox />
+						</DataTemplate>
+					</dc:PanesTemplateSelector.BookmarkWindowViewTemplate>
+					<dc:PanesTemplateSelector.OutputWindowViewTemplate>
+						<DataTemplate>
+							<ListView />
+						</DataTemplate>
+					</dc:PanesTemplateSelector.OutputWindowViewTemplate>
+					<dc:PanesTemplateSelector.FindResultViewTemplate>
+						<DataTemplate>
+							<ListView />
+						</DataTemplate>
+					</dc:PanesTemplateSelector.FindResultViewTemplate>
 					<dc:PanesTemplateSelector.LocalExplorerViewTemplate>
 						<DataTemplate>
 							<vv:LocalExplorerView />
@@ -440,11 +457,18 @@
 				</dc:PanesStyleSelector>
 			</av:DockingManager.LayoutItemContainerStyleSelector>
 
+			<av:DockingManager.LayoutUpdateStrategy>
+				<dc:LayoutInitializer />
+			</av:DockingManager.LayoutUpdateStrategy>
+
 			<av:LayoutRoot>
-				<av:LayoutPanel Orientation="Horizontal">
-					<av:LayoutAnchorablePane DockWidth="150"  />
-					<av:LayoutDocumentPane />
-					<av:LayoutAnchorablePane DockWidth="150" />
+				<av:LayoutPanel Orientation="Vertical">
+					<av:LayoutPanel Orientation="Horizontal">
+						<av:LayoutAnchorablePane DockWidth="200" Name="TPaneLeft" />
+						<av:LayoutDocumentPane />
+						<av:LayoutAnchorablePane DockWidth="200" Name="TPaneRight" />
+					</av:LayoutPanel>
+					<av:LayoutAnchorablePane Name="TPaneBottom" DockHeight="200" />
 				</av:LayoutPanel>
 			</av:LayoutRoot>
 		</av:DockingManager>

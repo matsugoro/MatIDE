@@ -24,13 +24,15 @@ namespace MatIDE.ViewModels
 	{
 		public static MainWindowVM Instance { get; private set; }
 
-
-
 		private ObservableCollection<ToolViewModel>	_tools;
 		private ObservableCollection<FileViewModel> _files = new ObservableCollection<FileViewModel>();
 		private ReadOnlyObservableCollection<FileViewModel> _readonyFiles = null;
 		private LocalExplorerVM _localExplorer;
 		private ProjectExplorerVM _projectExplorer;
+		private OutlineWindowVM _outlineWindow;
+		private BookmarkWindowVM _bookmarkWindow;
+		private OutputWindowVM _outputWindow;
+		private FindResultVM _findResultWindow;
 		private FileViewModel _activeDocument = null;
 
 		/// <summary>
@@ -113,14 +115,6 @@ namespace MatIDE.ViewModels
 
 		#endregion
 
-
-
-
-
-
-
-
-
 		public ObservableCollection<ToolViewModel> Tools
 		{
 			get {
@@ -128,6 +122,10 @@ namespace MatIDE.ViewModels
 					_tools = new ObservableCollection<ToolViewModel>();
 					_tools.Add( LocalExplorer );
 					_tools.Add( ProjectExplorer );
+					_tools.Add( OutlineWindow );
+					_tools.Add( BookmarkWindow );
+					_tools.Add( OutputWindow );
+					_tools.Add( FindResult );
 				}
 				return _tools;
 			}
@@ -177,8 +175,41 @@ namespace MatIDE.ViewModels
 			}
 		}
 
+		public OutlineWindowVM OutlineWindow
+		{
+			get {
+				if ( _outlineWindow == null )
+					_outlineWindow = new OutlineWindowVM();
+				return _outlineWindow;
+			}
+		}
 
+		public BookmarkWindowVM BookmarkWindow
+		{
+			get {
+				if ( _bookmarkWindow == null )
+					_bookmarkWindow = new BookmarkWindowVM();
+				return _bookmarkWindow;
+			}
+		}
 
+		public OutputWindowVM OutputWindow
+		{
+			get {
+				if ( _outputWindow == null )
+					_outputWindow = new OutputWindowVM();
+				return _outputWindow;
+			}
+		}
+
+		public FindResultVM FindResult
+		{
+			get {
+				if ( _findResultWindow == null )
+					_findResultWindow = new FindResultVM();
+				return _findResultWindow;
+			}
+		}
 
 		public event EventHandler ActiveDocumentChanged;
 

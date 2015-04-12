@@ -87,6 +87,7 @@
     <Compile Include="Behaviors\SettingTVBehavior.cs" />
     <Compile Include="Converters\ActiveDocumentConverter.cs" />
     <Compile Include="Converters\EnumRadioButtonConverter.cs" />
+    <Compile Include="Docking\LayoutInitializer.cs" />
     <Compile Include="Docking\PanesStyleSelector.cs" />
     <Compile Include="Docking\PanesTemplateSelector.cs" />
     <Compile Include="Models\AppSetting\SettingEditCommon.cs" />
@@ -101,12 +102,16 @@
     <Compile Include="Test\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\BookmarkWindowVM.cs" />
     <Compile Include="ViewModels\Dock\FileViewModel.cs" />
     <Compile Include="ViewModels\Dock\PaneViewModel.cs" />
     <Compile Include="ViewModels\Dock\ToolViewModel.cs" />
     <Compile Include="ViewModels\Explorer\ExplorerNodeVM.cs" />
+    <Compile Include="ViewModels\FindResultVM.cs" />
     <Compile Include="ViewModels\LocalExplorerVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
+    <Compile Include="ViewModels\OutlineWindow.cs" />
+    <Compile Include="ViewModels\OutputWindowVM.cs" />
     <Compile Include="ViewModels\ProjectExplorerVM.cs" />
     <Compile Include="ViewModels\Setting\SettingEditCommonVM.cs" />
     <Compile Include="ViewModels\Setting\SettingGeneralVM.cs" />
