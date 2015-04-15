@@ -9,6 +9,7 @@
 		xmlns:vm="clr-namespace:MatIDE.ViewModels"
 		xmlns:cv="clr-namespace:MatIDE.Converters"
 		xmlns:av="http://schemas.xceed.com/wpf/xaml/avalondock"
+		xmlns:ae="http://icsharpcode.net/sharpdevelop/avalonedit"
 		Name="Main"
 		Title="MainWindow" WindowState="Maximized" Height="1123.286" Width="1022.842">
 
@@ -349,6 +350,59 @@
 				<MenuItem Header="_Test" Command="{Binding TestWinCommand}" />
 			</MenuItem>
 		</Menu>
+		<ToolBar DockPanel.Dock="Top">
+			<ToolBar.Resources>
+				<Style TargetType="{x:Type Image}">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ButtonBase}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+							<Setter Property="Opacity" Value="0.30" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ToolBar.Resources>
+			<Button>
+				<Image Source="Images/Open.png" Height="16"/>
+			</Button>
+			<Button>
+				<Image Source="Images/Save.png" Height="16"/>
+			</Button>
+			<Separator/>
+			<Button Command="Cut">
+				<Image Source="Images/Cut.png" Height="16"/>
+			</Button>
+			<Button Command="Copy">
+				<Image Source="Images/Copy.png" Height="16"/>
+			</Button>
+			<Button Command="Paste">
+				<Image Source="Images/Paste.png" Height="16"/>
+			</Button>
+			<Button Command="Delete">
+				<Image Source="Images/Delete.png" Height="16"/>
+			</Button>
+			<Separator/>
+			<Button Command="Undo">
+				<Image Source="Images/Undo.png" Height="16"/>
+			</Button>
+			<Button Command="Redo">
+				<Image Source="Images/Redo.png" Height="16"/>
+			</Button>
+			<Separator/>
+			<CheckBox IsChecked="{Binding ElementName=textEditor,Path=WordWrap}">
+				<Image Source="Images/WordWrap.png" Height="16"/>
+			</CheckBox>
+			<CheckBox IsChecked="{Binding ElementName=textEditor,Path=ShowLineNumbers}">
+				<TextBlock Width="16" TextAlignment="Center">#</TextBlock>
+			</CheckBox>
+			<CheckBox IsChecked="{Binding ElementName=textEditor,Path=Options.ShowEndOfLine}">
+				<TextBlock Width="16" TextAlignment="Center">¶</TextBlock>
+			</CheckBox>
+			<!--
+			<ComboBox Name="highlightingComboBox"
+				SelectedItem="{Binding SyntaxHighlighting, ElementName=textEditor}"
+				ItemsSource="{Binding Source={x:Static avalonEdit:HighlightingManager.Instance}, Path=HighlightingDefinitions}"
+				SelectionChanged="HighlightingComboBox_SelectionChanged"/>
+			-->
+		</ToolBar>
 
 		<StatusBar DockPanel.Dock="Bottom" Name="statusBar" Visibility="{Binding VisibilityStatusbar}">
 			<StatusBarItem DockPanel.Dock="Right">Item2</StatusBarItem>
@@ -397,7 +451,10 @@
 				<dc:PanesTemplateSelector>
 					<dc:PanesTemplateSelector.FileViewTemplate>
 						<DataTemplate>
+							<ae:TextEditor Name="textEditor" FontFamily="Consolas" FontSize="10pt" SyntaxHighlighting="C#" />
+							<!--
 							<TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"/>
+							-->
 						</DataTemplate>
 					</dc:PanesTemplateSelector.FileViewTemplate>
 					<dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
