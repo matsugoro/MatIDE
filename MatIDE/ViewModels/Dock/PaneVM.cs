@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace MatIDE.ViewModels.Dock
 {
-	public class PaneViewModel : ViewModel
+	public class PaneVM : ViewModel
 	{
 		private string	_title = null;
 		private string	_contentId = null;
@@ -19,7 +19,7 @@ namespace MatIDE.ViewModels.Dock
 		/// <summary>
 		/// 
 		/// </summary>
-		public PaneViewModel()
+		public PaneVM()
 		{
 		}
 

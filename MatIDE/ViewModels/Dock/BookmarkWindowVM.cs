@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatIDE.ViewModels
+namespace MatIDE.ViewModels.Dock
 {
-	public class OutputWindowVM : ToolViewModel
+	public class BookmarkWindowVM : ToolVM
 	{
-		public OutputWindowVM() : base("Output", "TPaneBottom")
+		public BookmarkWindowVM() : base("Bookmark", "TPaneBottom")
 		{
-			ContentId = "OutputWindow";
+			ContentId = "BookmarkWindow";
 		}
 	}
 }

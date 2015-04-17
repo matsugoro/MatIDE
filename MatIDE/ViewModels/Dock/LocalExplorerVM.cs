@@ -4,9 +4,9 @@ using MatIDE.ViewModels.Explorer;
 using MatIDE.Docking;
 using MatIDE.ViewModels.Dock;
 
-namespace MatIDE.ViewModels
+namespace MatIDE.ViewModels.Dock
 {
-	public class LocalExplorerVM : ToolViewModel
+	public class LocalExplorerVM : ToolVM
 	{
 		ExplorerNodeVMCollection<ExplorerNodeVM>	_rootItems;
 

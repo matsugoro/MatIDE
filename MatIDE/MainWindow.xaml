@@ -3,6 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+		xmlns:my="clr-namespace:MatIDE"
 		xmlns:dc="clr-namespace:MatIDE.Docking"
 		xmlns:vv="clr-namespace:MatIDE.Views"
 		xmlns:vw="clr-namespace:MatIDE.Views.Setting"
@@ -36,11 +37,19 @@
 	<DockPanel Name="GeneralDock">
 		<Menu DockPanel.Dock="Top" Height="23">
 			<MenuItem Header="_File" Height="23">
-				<MenuItem Header="New _File" InputGestureText="Ctrl+N" Command="{Binding NewCommand}" />
+				<MenuItem Header="New _File" InputGestureText="Ctrl+N" Command="{Binding NewCommand}">
+					<MenuItem.Icon>
+						<Image Source="Images/document.png" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<MenuItem Header="New _Project" InputGestureText="Shift+Ctrl+N" />
 				<MenuItem Header="Create project from directory" />
 				<Separator />
-				<MenuItem Header="_Open File..." InputGestureText="Ctrl+O" Command="{Binding OpenCommand}" />
+				<MenuItem Header="_Open File..." InputGestureText="Ctrl+O" Command="{Binding OpenCommand}">
+					<MenuItem.Icon>
+						<Image Source="Images/Open.png" Height="16"/>
+					</MenuItem.Icon>
+				</MenuItem>
 				<MenuItem Header="Open Project..." InputGestureText="Shift+Ctrl+O" />
 				<Separator />
 				<MenuItem Header="Close project" />
@@ -50,26 +59,66 @@
 				<MenuItem Header="Save _As..." />
 				<MenuItem Header="すべてを保存" InputGestureText="Ctrl+Shift+S" />
 				<Separator />
-				<MenuItem Header="印刷(_P)..." InputGestureText="Ctrl+P" />
-				<MenuItem Header="印刷プレビュー(_V)" />
-				<MenuItem Header="プリンタの設定..." />
+				<MenuItem Header="_Print..." InputGestureText="Ctrl+P" />
+				<MenuItem Header="Print Pre_view" />
+				<MenuItem Header="Printer Settings..." />
 				<Separator />
-				<MenuItem Header="最近使ったファイル" >
-					<MenuItem Header="Dummy1" />
+				<MenuItem Header="Recent Files" Name="menuRecentFiles"
+				          ItemsSource="{Binding RecentFiles.ListOfMruEntries}"
+						  Visibility="{Binding Path=RecentFiles.ListOfMruEntries, Mode=OneWay, Converter={cv:ZeroToVisibilityConverter} }">
+					<MenuItem.ItemContainerStyle>
+						<Style TargetType="MenuItem">
+							<Setter Property="Header" Value="{Binding DisplayName, Mode=OneWay}" />
+							<Setter Property="Command" Value="my:AppCommands.LoadFile" />
+							<Setter Property="CommandParameter" Value="{Binding PathFileName, Mode=OneWay}" />
+							<Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+						</Style>
+					</MenuItem.ItemContainerStyle>
 				</MenuItem>
-				<MenuItem Header="最新使ったプロジェクト">
-					<MenuItem Header="Dummy2" />
+				<MenuItem Header="Recent Projects" Name="menuRecentProjects"
+						  ItemsSource="{Binding RecentProjects.ListOfMruEntries}"
+						  Visibility="{Binding Path=RecentProjects.ListOfMruEntries, Mode=OneWay, Converter={cv:ZeroToVisibilityConverter} }">			
+					<MenuItem.ItemContainerStyle>
+						<Style TargetType="MenuItem">
+							<Setter Property="Header" Value="{Binding DisplayName, Mode=OneWay}" />
+							<!--
+							<Setter Property="Command" Value="my:AppCommands.LoadFile" />
+							<Setter Property="CommandParameter" Value="{Binding PathFileName, Mode=OneWay}" />
+							-->
+							<Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+						</Style>
+					</MenuItem.ItemContainerStyle>
 				</MenuItem>
 				<Separator />
 				<MenuItem Header="MatIDEの終了(_X)" Command="{Binding QuitCommand}" CommandParameter="{Binding ElementName=Main}" />
 			</MenuItem>
 			<MenuItem Header="_Edit">
-				<MenuItem Header="元に戻す(_U)" InputGestureText="Ctrl+Z" />
-				<MenuItem Header="やり直し" InputGestureText="Ctrl+Y" />
+				<MenuItem Header="元に戻す(_U)" InputGestureText="Ctrl+Z">
+					<MenuItem.Icon>
+						<Image Source="Images/undo.png" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="やり直し" InputGestureText="Ctrl+Y">
+					<MenuItem.Icon>
+						<Image Source="Images/redo.png" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator />
-				<MenuItem Header="切り取り(_T)" InputGestureText="Ctrl+X" />
-				<MenuItem Header="コピー(_C)" InputGestureText="Ctrl+C" />
-				<MenuItem Header="貼り付け(_P)" InputGestureText="Ctrl+V" />
+				<MenuItem Header="切り取り(_T)" InputGestureText="Ctrl+X">
+					<MenuItem.Icon>
+						<Image Source="Images/cut.png" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="コピー(_C)" InputGestureText="Ctrl+C">
+					<MenuItem.Icon>
+						<Image Source="Images/copy.png" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="貼り付け(_P)" InputGestureText="Ctrl+V">
+					<MenuItem.Icon>
+						<Image Source="Images/paste.png" Height="16" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<MenuItem Header="削除(_D)" InputGestureText="Del" />
 				<Separator />
 				<MenuItem Header="文字コードセット指定" />
@@ -270,10 +319,10 @@
 					</MenuItem>
 				</MenuItem>
 				<Separator />
-				<MenuItem Header="ツールバー(_T)">
-					<MenuItem Header="標準" />
+				<MenuItem Header="_Toolbars">
+					<MenuItem Header="_Standard" IsCheckable="True" IsChecked="{Binding ElementName=stdToolbar, Path=Visibility, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={x:Static Visibility.Hidden}}" />
 					<Separator />
-					<MenuItem Header="カスタマイズ" />
+					<MenuItem Header="_Customize..." />
 				</MenuItem>
 				<MenuItem Header="_Statusbar" IsChecked="{Binding IsVisibleStatusbar, Mode=TwoWay}" IsCheckable="True" />
 				<MenuItem Header="_Function Keys" IsChecked="{Binding IsVisibleFunckyBar, Mode=TwoWay}" IsCheckable="True" />
@@ -350,7 +399,7 @@
 				<MenuItem Header="_Test" Command="{Binding TestWinCommand}" />
 			</MenuItem>
 		</Menu>
-		<ToolBar DockPanel.Dock="Top">
+		<ToolBar DockPanel.Dock="Top" Name="stdToolbar">
 			<ToolBar.Resources>
 				<Style TargetType="{x:Type Image}">
 					<Style.Triggers>
@@ -360,7 +409,10 @@
 					</Style.Triggers>
 				</Style>
 			</ToolBar.Resources>
-			<Button>
+			<Button Command="{Binding NewCommand}" ToolTip="New File">
+				<Image Source="Images/document.png" Height="16" />
+			</Button>
+			<Button Command="{Binding OpenCommand}" ToolTip="Open File">
 				<Image Source="Images/Open.png" Height="16"/>
 			</Button>
 			<Button>
@@ -409,7 +461,7 @@
 			<StatusBarItem DockPanel.Dock="Left" >Item1</StatusBarItem>
 		</StatusBar>
 
-		<Grid DockPanel.Dock="Bottom" Name="fkeyBar" Visibility="{Binding VisibilityFunckeyBar}" >
+		<Grid DockPanel.Dock="{Binding PosFunckeyBar}" Name="fkeyBar" Visibility="{Binding VisibilityFunckeyBar}" >
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
 				<ColumnDefinition />
@@ -439,7 +491,6 @@
 		</Grid>
 
 		<av:DockingManager x:Name="_dockingManager"
-						   BorderThickness="0"
 						   AnchorablesSource="{Binding Tools}"
 						   DocumentsSource="{Binding Files}"
 						   ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
@@ -447,41 +498,52 @@
 			<av:DockingManager.Theme>
 				<av:ExpressionLightTheme />
 			</av:DockingManager.Theme>
+
 			<av:DockingManager.LayoutItemTemplateSelector>
 				<dc:PanesTemplateSelector>
+
+					<!-- DocumentViewer -->
 					<dc:PanesTemplateSelector.FileViewTemplate>
 						<DataTemplate>
-							<ae:TextEditor Name="textEditor" FontFamily="Consolas" FontSize="10pt" SyntaxHighlighting="C#" />
-							<!--
-							<TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"/>
-							-->
+							<ae:TextEditor Name="textEditor"
+										   Document="{Binding Document, UpdateSourceTrigger=PropertyChanged}"
+										   SyntaxHighlighting="{Binding HighlightDef}"
+							               ShowLineNumbers="True" 
+										   FontFamily="Consolas" FontSize="10pt" />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.FileViewTemplate>
+
+					<!-- ProjectExplorer -->
 					<dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
 						<DataTemplate>
 							<TreeView />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.ProjectExplorerViewTemplate>
+					<!-- OutlineWindow -->
 					<dc:PanesTemplateSelector.OutlineWindowViewTemplate>
 						<DataTemplate>
 							<TreeView />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.OutlineWindowViewTemplate>
+					<!-- BookmarkWindow -->
 					<dc:PanesTemplateSelector.BookmarkWindowViewTemplate>
 						<DataTemplate>
 							<TextBox />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.BookmarkWindowViewTemplate>
+					<!-- OutputWindow -->
 					<dc:PanesTemplateSelector.OutputWindowViewTemplate>
 						<DataTemplate>
 							<ListView />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.OutputWindowViewTemplate>
+					<!-- SearchResult -->
 					<dc:PanesTemplateSelector.FindResultViewTemplate>
 						<DataTemplate>
 							<ListView />
 						</DataTemplate>
 					</dc:PanesTemplateSelector.FindResultViewTemplate>
+					<!-- LocalExplorerView -->
 					<dc:PanesTemplateSelector.LocalExplorerViewTemplate>
 						<DataTemplate>
 							<vv:LocalExplorerView />
@@ -508,7 +570,8 @@
 							<Setter Property="ToolTip" Value="{Binding Model.FilePath}"/>
 							<Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}"/>
 							<Setter Property="IconSource" Value="{Binding Model.Icon}"/>
-							<Setter Property="ContentId" Value="{Binding Model.ContentId}"/>
+							<Setter Property="ContentId" Value="{Binding Model.ContentId}"
+							/>
 						</Style>
 					</dc:PanesStyleSelector.FileStyle>
 				</dc:PanesStyleSelector>

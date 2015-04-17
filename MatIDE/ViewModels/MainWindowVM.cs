@@ -12,6 +12,7 @@ using MatIDE.ViewModels.Dock;
 using Microsoft.Win32;
 using System.Windows.Input;
 using System.Windows.Data;
+using ICSharpCode.AvalonEdit.Document;
 
 namespace MatIDE.ViewModels
 {
@@ -24,26 +25,70 @@ namespace MatIDE.ViewModels
 	{
 		public static MainWindowVM Instance { get; private set; }
 
-		private ObservableCollection<ToolViewModel>	_tools;
-		private ObservableCollection<FileViewModel> _files = new ObservableCollection<FileViewModel>();
-		private ReadOnlyObservableCollection<FileViewModel> _readonyFiles = null;
+		#region Fields
+		
+		private ObservableCollection<ToolVM> _tools;
+		private readonly ObservableCollection<DocumentVM> _files = new ObservableCollection<DocumentVM>();
+		private ReadOnlyObservableCollection<DocumentVM> _readonyFiles = null;
 		private LocalExplorerVM _localExplorer;
 		private ProjectExplorerVM _projectExplorer;
 		private OutlineWindowVM _outlineWindow;
 		private BookmarkWindowVM _bookmarkWindow;
 		private OutputWindowVM _outputWindow;
 		private FindResultVM _findResultWindow;
-		private FileViewModel _activeDocument = null;
+		private DocumentVM _activeDocument = null;
+		#endregion
 
 		/// <summary>
-		/// 
+		/// Standard constructor.
 		/// </summary>
 		public MainWindowVM()
 		{
 			Instance = this;
 		}
 
-		#region ===== Visibility Functionkeys =====
+		public void InitCommandBindings(Window win)
+		{
+			win.CommandBindings.Add(
+				new CommandBinding(
+						AppCommands.LoadFile, (s,e) => {
+							if ( e == null )
+								return;
+							string	filePath = e.Parameter as string;
+							if ( string.IsNullOrEmpty(filePath) )
+								return;
+							ActiveDocument = this.Open(filePath);
+						}
+					));
+		}
+
+		#region MruFiles
+		
+		private MRUListVM _mruFiles;
+		
+		public MRUListVM RecentFiles
+		{
+			get {
+				if ( _mruFiles == null )
+					_mruFiles = new MRUListVM();
+				return _mruFiles;
+			}
+		}
+		
+		private MRUListVM _mruProjects;
+		
+		public MRUListVM RecentProjects
+		{
+			get {
+				if ( _mruProjects == null )
+					_mruProjects = new MRUListVM();
+				return _mruProjects;
+			}
+		}
+		
+		#endregion
+
+		#region Visibility Functionkeys
 		public bool IsVisibleFunckyBar
 		{
 			get {
@@ -57,7 +102,6 @@ namespace MatIDE.ViewModels
 				}
 			}
 		}
-
 
 		public Visibility VisibilityFunckeyBar
 		{
@@ -75,9 +119,17 @@ namespace MatIDE.ViewModels
 			}
 		}
 
+		public string PosFunckeyBar
+		{
+			get {
+				return "Top";
+			}
+		}
+
+
 		#endregion
 
-		#region ===== Visibility Statusbar =====
+		#region Visibility Statusbar
 
 		public bool IsVisibleStatusbar
 		{
@@ -115,32 +167,33 @@ namespace MatIDE.ViewModels
 
 		#endregion
 
-		public ObservableCollection<ToolViewModel> Tools
+		public ObservableCollection<ToolVM> Tools
 		{
 			get {
 				if ( _tools == null ){
-					_tools = new ObservableCollection<ToolViewModel>();
-					_tools.Add( LocalExplorer );
-					_tools.Add( ProjectExplorer );
-					_tools.Add( OutlineWindow );
-					_tools.Add( BookmarkWindow );
-					_tools.Add( OutputWindow );
-					_tools.Add( FindResult );
+					_tools = new ObservableCollection<ToolVM>(){
+						LocalExplorer,
+						ProjectExplorer,
+						OutlineWindow,
+						BookmarkWindow,
+						OutputWindow,
+						FindResult
+					};
 				}
 				return _tools;
 			}
 		}
 
-		public ReadOnlyObservableCollection<FileViewModel> Files
+		public ReadOnlyObservableCollection<DocumentVM> Files
 		{
 			get {
 				if ( _readonyFiles == null )
-					_readonyFiles = new ReadOnlyObservableCollection<FileViewModel>(_files);
+					_readonyFiles = new ReadOnlyObservableCollection<DocumentVM>(_files);
 				return _readonyFiles;
 			}
 		}
 
-		public FileViewModel ActiveDocument
+		public DocumentVM ActiveDocument
 		{
 			get {
 				return _activeDocument;
@@ -153,6 +206,7 @@ namespace MatIDE.ViewModels
 					if ( ActiveDocumentChanged != null )
 						ActiveDocumentChanged( this, EventArgs.Empty );
 					CloseCommand.RaiseCanExecuteChanged();
+					
 				}
 			}
 		}
@@ -213,9 +267,7 @@ namespace MatIDE.ViewModels
 
 		public event EventHandler ActiveDocumentChanged;
 
-		#region ===== COMMANDS =====
-
-		#region ===== NewCommand =====
+		#region NewCommand
 		private ViewModelCommand	_newCommand = null;
 
 		public ViewModelCommand NewCommand
@@ -234,13 +286,13 @@ namespace MatIDE.ViewModels
 
 		private void OnNew()
 		{
-			_files.Add( new FileViewModel() );
+			_files.Add(new DocumentVM() { Document = new TextDocument() });
 			ActiveDocument = _files.Last();
 		}
 
 		#endregion 
 
-		#region  ===== OpenCommand =====
+		#region OpenCommand
 
 		private ViewModelCommand	_openCommand = null;
 
@@ -267,20 +319,22 @@ namespace MatIDE.ViewModels
 			}
 		}
 
-		public FileViewModel Open(string filepath)
+		public DocumentVM Open(string filepath)
 		{
 			var fileViewModel = _files.FirstOrDefault(fm => fm.FilePath == filepath);
 
 			if ( fileViewModel != null )
 				return fileViewModel;
-			fileViewModel = new FileViewModel(filepath);
+			fileViewModel = new DocumentVM(filepath);
 			_files.Add(fileViewModel);
+			RecentFiles.AddNewEntryIntoMRU(filepath);
+			RaisePropertyChanged("RecentFiles");
 			return fileViewModel;
 		}
 
 		#endregion
 
-		#region ===== CloseCommand =====
+		#region CloseCommand
 
 		private ViewModelCommand	_closeCommand = null;
 
@@ -305,12 +359,9 @@ namespace MatIDE.ViewModels
 			Close(ActiveDocument);
 		}
 
-
-
-
 		#endregion
 
-		#region ===== TestCommand =====
+		#region TestCommand
 
 		private ViewModelCommand	_TestCommand;
 
@@ -330,7 +381,7 @@ namespace MatIDE.ViewModels
 		}
 		#endregion
 
-		#region ===== SettingCommand =====
+		#region SettingCommand
 		private ViewModelCommand _SettingCommand;
 
 		public ViewModelCommand SettingCommand
@@ -380,14 +431,22 @@ namespace MatIDE.ViewModels
 		}
 		#endregion
 
-		#endregion
-
-		public void Initialize()
+		private ICSharpCode.AvalonEdit.TextEditorOptions _options;
+		
+		public ICSharpCode.AvalonEdit.TextEditorOptions Options
 		{
+			get {
+				if ( _options == null ){
+					_options = new ICSharpCode.AvalonEdit.TextEditorOptions();
+					_options.ShowTabs = true;
+					_options.ShowColumnRuler = true;
+				}
+				return _options;
+			}
 		}
-
-
-		internal void Close( FileViewModel fileToClose )
+		
+		
+		internal void Close( DocumentVM fileToClose )
 		{
 			if ( fileToClose.IsDirty ){
 				/*

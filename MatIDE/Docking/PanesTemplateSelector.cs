@@ -23,9 +23,14 @@ namespace MatIDE.Docking
 		public DataTemplate BookmarkWindowViewTemplate	{ get; set; }
 		public DataTemplate OutputWindowViewTemplate	{ get; set; }
 		public DataTemplate FindResultViewTemplate		{ get; set; }
-
 		public DataTemplate FileViewTemplate			{ get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="container"></param>
+		/// <returns></returns>
 		public override DataTemplate SelectTemplate( object item, DependencyObject container )
 		{
 			var	itemAsLayoutContent = item as LayoutContent;
@@ -48,7 +53,7 @@ namespace MatIDE.Docking
 			if ( item is FindResultVM )
 				return FindResultViewTemplate;
 
-			if ( item is FileViewModel )
+			if ( item is DocumentVM )
 				return FileViewTemplate;
 
 			return base.SelectTemplate( item, container );

@@ -83,16 +83,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppCommands.cs" />
     <Compile Include="Attributes\ContentPropertyAttribute.cs" />
     <Compile Include="Behaviors\SettingTVBehavior.cs" />
     <Compile Include="Converters\ActiveDocumentConverter.cs" />
     <Compile Include="Converters\EnumRadioButtonConverter.cs" />
+    <Compile Include="Converters\ZeroToVisibilityConverter.cs" />
     <Compile Include="Docking\LayoutInitializer.cs" />
     <Compile Include="Docking\PanesStyleSelector.cs" />
     <Compile Include="Docking\PanesTemplateSelector.cs" />
     <Compile Include="Models\AppSetting\SettingEditCommon.cs" />
     <Compile Include="Models\AppSetting\SettingGeneral.cs" />
     <Compile Include="Models\AppSetting\SettingTab.cs" />
+    <Compile Include="Models\MRUEntry.cs" />
+    <Compile Include="Models\MRUList.cs" />
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Models\AppSetting\Settings.cs" />
     <Compile Include="Native\Win32Shell.cs" />
@@ -102,17 +106,19 @@
     <Compile Include="Test\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\BookmarkWindowVM.cs" />
-    <Compile Include="ViewModels\Dock\FileViewModel.cs" />
-    <Compile Include="ViewModels\Dock\PaneViewModel.cs" />
-    <Compile Include="ViewModels\Dock\ToolViewModel.cs" />
+    <Compile Include="ViewModels\Dock\BookmarkWindowVM.cs" />
+    <Compile Include="ViewModels\Dock\DocumentVM.cs" />
+    <Compile Include="ViewModels\Dock\FindResultVM.cs" />
+    <Compile Include="ViewModels\Dock\LocalExplorerVM.cs" />
+    <Compile Include="ViewModels\Dock\OutlineWindowVM.cs" />
+    <Compile Include="ViewModels\Dock\OutputWindowVM.cs" />
+    <Compile Include="ViewModels\Dock\PaneVM.cs" />
+    <Compile Include="ViewModels\Dock\ProjectExplorerVM.cs" />
+    <Compile Include="ViewModels\Dock\ToolVM.cs" />
     <Compile Include="ViewModels\Explorer\ExplorerNodeVM.cs" />
-    <Compile Include="ViewModels\FindResultVM.cs" />
-    <Compile Include="ViewModels\LocalExplorerVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
-    <Compile Include="ViewModels\OutlineWindow.cs" />
-    <Compile Include="ViewModels\OutputWindowVM.cs" />
-    <Compile Include="ViewModels\ProjectExplorerVM.cs" />
+    <Compile Include="ViewModels\MRUEntryVM.cs" />
+    <Compile Include="ViewModels\MRUListVM.cs" />
     <Compile Include="ViewModels\Setting\SettingEditCommonVM.cs" />
     <Compile Include="ViewModels\Setting\SettingGeneralVM.cs" />
     <Compile Include="ViewModels\Setting\SettingTabVM.cs" />
