@@ -21,9 +21,15 @@ namespace MatIDE
 	/// </summary>
 	public partial class App : Application
 	{
+		#region properties
 		public AppSettings						AppSet			{ get; private set; }
 		public Dictionary<string, ImageSource>	FileImage		{ get; private set; }
+		#endregion
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnStartup( StartupEventArgs e )
 		{
 			base.OnStartup( e );
@@ -32,6 +38,11 @@ namespace MatIDE
 			FileImage	= new Dictionary<string,ImageSource>();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <returns></returns>
 		public ImageSource GetImageFromExt( string fileName )
 		{
 			string	ext;

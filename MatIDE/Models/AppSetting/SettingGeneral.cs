@@ -21,29 +21,94 @@ namespace MatIDE.Models.AppSetting
 	[Serializable]
 	public class SettingGeneral
 	{
-		#region ===== PROPERTIES =====
-		public UInt32			VisualStyle			{ get; set; }
-		public bool				UseRibbon			{ get; set; }
-		public bool				ShowFunctionKeys	{ get; set; }
-		public bool				FunckeyPosUpper		{ get; set; }
-		public bool				ShowStatusBar		{ get; set; }
-		public StatusBarItem	StatusBarFlags		{ get; set; }
-		public Int32			MruFileNum			{ get; set; }
-		public Int32			MruProjectNum		{ get; set; }
-		public bool				ShowExitConfirm		{ get; set; }
+		#region Fields
+		private MRUList	_mruFileList = null;
+		private MRUList _mruProjectList = null;
+		#endregion
+		
+		#region Properties
+
+		/// <summary>
+		/// MatIDEの概観
+		/// </summary>
+		public UInt32 VisualStyle { get; set; }
+
+		/// <summary>
+		/// Ribbonの使用
+		/// </summary>
+		public bool UseRibbon { get; set; }
+
+		/// <summary>
+		/// ファンクションキーバーの使用
+		/// </summary>
+		public bool ShowFunctionKeys { get; set; }
+
+		/// <summary>
+		/// ファンクションキーバーの表示位置
+		/// </summary>
+		public bool FunckeyPosUpper { get; set; }
+
+		/// <summary>
+		/// ステータスバーの表示
+		/// </summary>
+		public bool ShowStatusBar { get; set; }
+
+		/// <summary>
+		/// ステータスバー表示項目
+		/// </summary>
+		public StatusBarItem StatusBarFlags { get; set; }
+
+		/// <summary>
+		/// MRU(ファイル)の最大表示数
+		/// </summary>
+		public Int32 MaxMruFileNum { get; set; }
+
+		/// <summary>
+		/// MRU(ファイル)リスト
+		/// </summary>
+		public MRUList MruFileList
+		{
+			get {
+				if ( _mruFileList == null )
+					_mruFileList = new MRUList();
+				return _mruFileList;
+			}
+		}
+
+		/// <summary>
+		/// MRU(プロジェクト)の最大表示数
+		/// </summary>
+		public Int32 MaxMruProjectNum { get; set; }
+
+		/// <summary>
+		/// MRU(プロジェクト）リスト
+		/// </summary>
+		public MRUList MruProjectList
+		{
+			get {
+				if ( _mruProjectList == null )
+					_mruProjectList = new MRUList();
+				return _mruProjectList;
+			}
+		}
+
+		/// <summary>
+		/// 終了確認表示
+		/// </summary>
+		public bool ShowExitConfirm { get; set; }
 		#endregion
 
 		public SettingGeneral()
 		{
-			VisualStyle			= 0;
-			UseRibbon			= true;
-			ShowFunctionKeys	= false;
-			FunckeyPosUpper		= false;
-			ShowStatusBar		= true;
-			StatusBarFlags		= StatusBarItem.CurrentRowCol|StatusBarItem.CurrentLinePos|StatusBarItem.InsMode;
-			MruFileNum			= 10;
-			MruProjectNum		= 10;
-			ShowExitConfirm		= true;
+			VisualStyle = 0;
+			UseRibbon = true;
+			ShowFunctionKeys = false;
+			FunckeyPosUpper = false;
+			ShowStatusBar = true;
+			StatusBarFlags = StatusBarItem.CurrentRowCol|StatusBarItem.CurrentLinePos|StatusBarItem.InsMode;
+			MaxMruFileNum = 10;
+			MaxMruProjectNum = 10;
+			ShowExitConfirm = true;
 		}
 	}
 }

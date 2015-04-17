@@ -18,9 +18,9 @@ namespace MatIDE.Models.AppSetting
 
 		public AppSettings()
 		{
-			General		= new SettingGeneral();
-			Tab			= new SettingTab();
-			EditCommon	= new SettingEditCommon();
+			General = new SettingGeneral();
+			Tab = new SettingTab();
+			EditCommon = new SettingEditCommon();
 		}
 
 		#region Culture 変更通知プロパティ

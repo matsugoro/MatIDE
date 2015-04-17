@@ -26,10 +26,10 @@ namespace MatIDE.Docking
 
 		public override Style SelectStyle( object item, DependencyObject container )
 		{
-			if ( item is ToolViewModel )
+			if ( item is ToolVM )
 				return ToolStyle;
 
-			if ( item is FileViewModel )
+			if ( item is DocumentVM )
 				return FileStyle;
 
 			return base.SelectStyle( item, container );

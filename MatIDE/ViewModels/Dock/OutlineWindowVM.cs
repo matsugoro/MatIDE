@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MatIDE.ViewModels
+namespace MatIDE.ViewModels.Dock
 {
-	public class OutlineWindowVM : ToolViewModel
+	public class OutlineWindowVM : ToolVM
 	{
 		public OutlineWindowVM() : base("Outline", "TPaneRight")
 		{

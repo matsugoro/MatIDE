@@ -8,23 +8,22 @@ using System.Windows.Media;
 using System.ComponentModel;
 using System.Windows;
 using Livet.Commands;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Utils;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 
 namespace MatIDE.ViewModels.Dock
 {
-	public class FileViewModel : PaneViewModel
+	public class DocumentVM : PaneVM
 	{
 		static ImageSourceConverter ISC = new ImageSourceConverter();
-
-		private string _filePath = null;
-		private string _textContent = string.Empty;
-		private bool _isDirty = false;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="filePath"></param>
-		public FileViewModel( string filePath )
+		public DocumentVM( string filePath )
 		{
 			FilePath = filePath;
 			Title = FileName;
@@ -34,18 +33,57 @@ namespace MatIDE.ViewModels.Dock
 		/// <summary>
 		/// 
 		/// </summary>
-		public FileViewModel()
+		public DocumentVM()
 		{
 			IsDirty = false;
 			Title = FileName;
 			Icon = ISC.ConvertFromInvariantString(@"pack://application:,,/Images/document.png") as ImageSource;
 		}
 
+		#region TextContent
+
+		private TextDocument _document = null;
+
+		public TextDocument Document
+		{
+			get {
+				return _document;
+			}
+			set {
+				if ( _document != value ){
+					_document = value;
+					RaisePropertyChanged("Document");
+					IsDirty = true;
+				}
+			}
+		}
+
+		#endregion
+
+		#region HighlightingDefinition
+
+		private IHighlightingDefinition _highlightdef = null;
+
+		public IHighlightingDefinition HighlightDef
+		{
+			get {
+				return this._highlightdef;
+			}
+			set {
+				if ( this._highlightdef != value ){
+					this._highlightdef = value;
+					RaisePropertyChanged("HighlightDef");
+					IsDirty = true;
+				}
+			}
+		}
+
+		#endregion
+
 		#region ===== IsDirty =====
 
-		/// <summary>
-		/// 
-		/// </summary>
+		private bool _isDirty = false;
+
 		public bool IsDirty
 		{
 			get {
@@ -63,6 +101,8 @@ namespace MatIDE.ViewModels.Dock
 
 		#region ===== FilePath =====
 
+		private string _filePath = null;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -74,12 +114,23 @@ namespace MatIDE.ViewModels.Dock
 			set {
 				if ( _filePath != value ){
 					_filePath = value;
-					RaisePropertyChanged();
+	
+					RaisePropertyChanged("FilePath");
 					RaisePropertyChanged("FileName");
 					RaisePropertyChanged("Title");
+					if ( File.Exists( _filePath ) ){
+						string	ext = Path.GetExtension(_filePath);
 
-					if ( File.Exists(_filePath) ){
-						_textContent = File.ReadAllText(_filePath);
+						_document = new TextDocument();
+						this.HighlightDef = HighlightingManager.Instance.GetDefinitionByExtension(ext);
+						this._isDirty = false;
+//						this.IsReadOnly = false;
+
+						using ( var fs = new FileStream( _filePath, FileMode.Open, FileAccess.Read, FileShare.Read )){
+							using ( StreamReader sr = FileReader.OpenStream( fs, Encoding.UTF8 )){
+								_document = new TextDocument(sr.ReadToEnd());
+							}
+						}
 						ContentId = _filePath;
 					}
 				}
@@ -99,23 +150,23 @@ namespace MatIDE.ViewModels.Dock
 			}
 		}
 
-		#region ===== TextContent =====
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public string TextContent
+		#region CloseCommand
+
+		private ViewModelCommand _closeCommand;
+
+		public ViewModelCommand CloseCommand
 		{
 			get {
-				return _textContent;
+				if ( _closeCommand == null )
+					_closeCommand = new ViewModelCommand(OnClose);
+				return _closeCommand;
 			}
-			set {
-				if ( _textContent != value ){
-					_textContent = value;
-					RaisePropertyChanged();
-					IsDirty = true;
-				}
-			}
+		}
+
+		private void OnClose()
+		{
+			MainWindowVM.Instance.Close(this);
 		}
 
 		#endregion

@@ -19,6 +19,9 @@ namespace MatIDE.ViewModels
 {
 	public class SettingGeneralVM : SettingVMBase
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public void Initialize()
 		{
 		}
@@ -211,11 +214,11 @@ namespace MatIDE.ViewModels
 		public Int32 MRUFileNum
 		{
 			get {
-				return General.MruFileNum;
+				return General.MaxMruFileNum;
 			}
 			set {
-				if ( General.MruFileNum != value ) {
-					General.MruFileNum = value;
+				if ( General.MaxMruFileNum != value ) {
+					General.MaxMruFileNum = value;
 					RaisePropertyChanged();
 				}
 			}
@@ -227,11 +230,11 @@ namespace MatIDE.ViewModels
 		public Int32 MRUProjectNum
 		{
 			get {
-				return General.MruProjectNum;
+				return General.MaxMruProjectNum;
 			}
 			set {
-				if ( General.MruProjectNum != value ) {
-					General.MruProjectNum = value;
+				if ( General.MaxMruProjectNum != value ) {
+					General.MaxMruProjectNum = value;
 					RaisePropertyChanged();
 				}
 			}

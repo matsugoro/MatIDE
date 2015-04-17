@@ -17,9 +17,9 @@ namespace MatIDE.Docking
 			if ( destinationContainer != null && destinationContainer.FindParent<LayoutFloatingWindow>() != null)
 				return false;
 
-			if ( anchorableToShow.Content is ToolViewModel ){
-				ToolViewModel	tvm = (ToolViewModel)anchorableToShow.Content;
-				var				toolsPane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(d => d.Name == tvm.InitialPane );
+			if ( anchorableToShow.Content is ToolVM ){
+				ToolVM	tvm = (ToolVM)anchorableToShow.Content;
+				var		toolsPane = layout.Descendents().OfType<LayoutAnchorablePane>().FirstOrDefault(d => d.Name == tvm.InitialPane );
 
 				if ( toolsPane != null ){
 					toolsPane.Children.Add(anchorableToShow);

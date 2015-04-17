@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MatIDE.ViewModels;
 
 namespace MatIDE
 {
@@ -16,6 +17,7 @@ namespace MatIDE
 		{
 			try {
 				InitializeComponent();
+				MainWindowVM.Instance.InitCommandBindings(this);
 			}
 			catch ( System.Exception ex ){
 				System.Diagnostics.Debug.WriteLine(ex.Message);

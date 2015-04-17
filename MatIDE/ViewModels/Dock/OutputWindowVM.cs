@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MatIDE.ViewModels
 {
-	public class BookmarkWindowVM : ToolViewModel
+	public class OutputWindowVM : ToolVM
 	{
-		public BookmarkWindowVM() : base("Bookmark", "TPaneBottom")
+		public OutputWindowVM() : base("Output", "TPaneBottom")
 		{
-			ContentId = "BookmarkWindow";
+			ContentId = "OutputWindow";
 		}
 	}
 }
